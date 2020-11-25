@@ -178,6 +178,7 @@
       <module fileurl="file://$PROJECT_DIR$/plugins/maven/maven30-server-impl/maven30-server-impl.iml" filepath="$PROJECT_DIR$/plugins/maven/maven30-server-impl/maven30-server-impl.iml" group="plugins/maven" />
       <module fileurl="file://$PROJECT_DIR$/plugins/maven/maven32-server-impl/maven32-server-impl.iml" filepath="$PROJECT_DIR$/plugins/maven/maven32-server-impl/maven32-server-impl.iml" group="plugins/maven" />
       <module fileurl="file://$PROJECT_DIR$/android/tools-base/ninepatch/ninepatch.iml" filepath="$PROJECT_DIR$/android/tools-base/ninepatch/ninepatch.iml" group="android/sdktools" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/oh-my-idea/oh-my-idea.iml" filepath="$PROJECT_DIR$/plugins/oh-my-idea/oh-my-idea.iml" group="plugins" />
       <module fileurl="file://$PROJECT_DIR$/java/openapi/openapi.iml" filepath="$PROJECT_DIR$/java/openapi/openapi.iml" group="java" />
       <module fileurl="file://$PROJECT_DIR$/android/tools-base/perflib/perflib.iml" filepath="$PROJECT_DIR$/android/tools-base/perflib/perflib.iml" group="android/sdktools" />
       <module fileurl="file://$PROJECT_DIR$/platform/platform-api/platform-api.iml" filepath="$PROJECT_DIR$/platform/platform-api/platform-api.iml" group="platform" />
