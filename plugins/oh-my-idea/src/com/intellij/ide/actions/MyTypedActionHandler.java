@@ -65,10 +65,17 @@ public class MyTypedActionHandler implements TypedActionHandler {
     final AnAction action = ActionManager.getInstance().getAction(actionName);
     if (action != null) {
       ApplicationManager.getApplication().invokeLater(new Runnable() {
+
         @Override
         public void run() {
-          action.actionPerformed(new AnActionEvent(null, dataContext, "", new Presentation(), ActionManager.getInstance(), 0));
+          try {
+            action.actionPerformed(new AnActionEvent(null, dataContext, "", new Presentation(), ActionManager.getInstance(), 0));
+          }
+          catch (Exception e) {
+            e.printStackTrace();
+          }
         }
+
       });
     }
   }

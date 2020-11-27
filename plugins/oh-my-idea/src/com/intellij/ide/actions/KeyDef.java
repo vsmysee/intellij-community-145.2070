@@ -270,7 +270,6 @@ public class KeyDef {
       put("w", "ToggleBookmark");
       put("W", "ToggleBookmarkWithMnemonic");
       put("e", "AutoIndentLines");
-      put("b", "ShowBookmarks");
       put("n", "EditorBackSpace");
       put("N", "EditorDelete");
 
