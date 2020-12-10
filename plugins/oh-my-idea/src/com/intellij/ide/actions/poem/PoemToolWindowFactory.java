@@ -34,19 +34,6 @@ public class PoemToolWindowFactory implements ToolWindowFactory {
     Box component = buildBox();
     content.add(component);
 
-    component.addMouseListener(new MouseAdapter() {
-
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        if (e.getClickCount() == 2) {
-
-          List<String> poems = Arrays.asList(random().split(";"));
-          new ZoomDialog(poems);
-
-        }
-      }
-    });
-
     final DefaultActionGroup toolbarActions = createToolbarActions();
     final ActionToolbar toolbar = ActionManager.getInstance().createActionToolbar("PoemToolBar", toolbarActions, true);
     JComponent tool = toolbar.getComponent();
