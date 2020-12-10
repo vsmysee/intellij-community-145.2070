@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +33,19 @@ public class PoemToolWindowFactory implements ToolWindowFactory {
     JPanel content = new JPanel(new BorderLayout());
     Box component = buildBox();
     content.add(component);
+
+    component.addMouseListener(new MouseAdapter() {
+
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        if (e.getClickCount() == 2) {
+
+          List<String> poems = Arrays.asList(random().split(";"));
+          new ZoomDialog(poems);
+
+        }
+      }
+    });
 
     final DefaultActionGroup toolbarActions = createToolbarActions();
     final ActionToolbar toolbar = ActionManager.getInstance().createActionToolbar("PoemToolBar", toolbarActions, true);
@@ -69,7 +84,7 @@ public class PoemToolWindowFactory implements ToolWindowFactory {
     content.add(Box.createGlue());
 
     holder = new JPanel();
-    JComponent poem = PoemBuilder.build(poems).getPoem();
+    JComponent poem = PoemBuilder.build(poems,false).getPoem();
     holder.add(poem);
     content.add(holder);
 
