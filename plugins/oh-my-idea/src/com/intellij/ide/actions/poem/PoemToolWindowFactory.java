@@ -1,6 +1,8 @@
 package com.intellij.ide.actions.poem;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -9,8 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,8 +83,12 @@ public class PoemToolWindowFactory implements ToolWindowFactory {
 
   public static String random() {
 
+    if (db.size() == 0) {
+      init();
+    }
+
     Random rand = new Random();
-    int index = 0 + rand.nextInt(db.size());
+    int index = rand.nextInt(db.size());
     String poem = db.get(index);
 
     return poem;
