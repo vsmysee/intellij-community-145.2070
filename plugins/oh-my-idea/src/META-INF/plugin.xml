@@ -24,8 +24,9 @@
       <keyboard-shortcut first-keystroke="alt 8" keymap="$default"/>
     </action>
     <action id="ShowSelectActions" class="com.intellij.ide.actions.ActionPop"/>
-    <action class="com.intellij.ide.actions.poem.ShowPoemAction" id="ShowPoemAction" icon="/icons/poem.png">
+    <action class="com.intellij.ide.actions.poem.ShowPoemAction" id="ShowPoemAction" icon="/icons/poem.png" text="ChinaPoem">
       <add-to-group group-id="MainToolBar" anchor="last"/>
+      <add-to-group group-id="HelpMenu" anchor="after" relative-to-action="GotoAction"/>
     </action>
   </actions>
 

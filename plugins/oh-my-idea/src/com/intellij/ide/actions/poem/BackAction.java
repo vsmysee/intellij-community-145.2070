@@ -17,6 +17,10 @@ public class BackAction extends AnAction {
         stack.push(poem);
     }
 
+    public static String pop() {
+        return stack.pop();
+    }
+
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
 
