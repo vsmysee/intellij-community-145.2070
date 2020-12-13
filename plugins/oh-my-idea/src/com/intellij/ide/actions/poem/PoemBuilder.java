@@ -2,7 +2,7 @@ package com.intellij.ide.actions.poem;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PoemBuilder {
@@ -33,11 +33,9 @@ public class PoemBuilder {
     return horizontalBox;
   }
 
-  public static PoemPanel build(List<String> poems, boolean pop) {
+  public static JComponent build(List<String> poems, boolean pop) {
 
     JComponent poemRoot = Box.createVerticalBox();
-
-    PoemPanel poemPanel = new PoemPanel(poemRoot);
 
     poemRoot.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
 
@@ -45,6 +43,8 @@ public class PoemBuilder {
 
     poemRoot.add(new JSeparator());
     poemRoot.add(Box.createVerticalStrut(10));
+
+    List<JPanel> poemPanel = new ArrayList<>();
 
     int index = 2;
 
@@ -97,7 +97,7 @@ public class PoemBuilder {
 
 
     Box poemContent = Box.createVerticalBox();
-    for (JPanel poemLabel : poemPanel.getPoemLabels()) {
+    for (JPanel poemLabel : poemPanel) {
       poemContent.add(poemLabel);
     }
 
@@ -106,11 +106,10 @@ public class PoemBuilder {
     bottom.add(new CirclePanel(poems.get(0), 20, 25));
     poemContent.add(bottom);
 
-    poemPanel.add(bottom);
 
     poemRoot.add(poemContent);
 
-    return poemPanel;
+    return poemRoot;
   }
 
   private static JLabel buildJLabel(String text, int size) {

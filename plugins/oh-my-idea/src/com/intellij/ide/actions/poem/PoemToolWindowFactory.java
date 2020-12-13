@@ -71,7 +71,7 @@ public class PoemToolWindowFactory implements ToolWindowFactory {
     content.add(Box.createGlue());
 
     holder = new JPanel();
-    JComponent poem = PoemBuilder.build(poems,false).getPoem();
+    JComponent poem = PoemBuilder.build(poems,false);
     holder.add(poem);
     content.add(holder);
 

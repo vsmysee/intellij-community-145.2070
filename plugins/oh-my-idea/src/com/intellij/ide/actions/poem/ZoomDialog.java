@@ -9,8 +9,6 @@ public class ZoomDialog extends JDialog {
 
     private JComponent poem;
 
-    private List<JPanel> poemLabels;
-
     public ZoomDialog(List<String> poems) {
 
         setDefaultCloseOperation(2);
@@ -27,17 +25,16 @@ public class ZoomDialog extends JDialog {
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 
-        PoemPanel pp = PoemBuilder.build(poems,true);
-        poem = pp.getPoem();
+        poem = PoemBuilder.build(poems,true);
         add(poem);
-        poemLabels = pp.getPoemLabels();
         pack();
 
         if (getWidth() < 600) {
             setSize(600,getHeight());
         }
 
-        resetPosition(poems);
+        setLocationRelativeTo(null);
+
 
         setVisible(true);
 
@@ -69,23 +66,13 @@ public class ZoomDialog extends JDialog {
     }
 
 
-    private void resetPosition(List<String> poems) {
-        if (poems.size() > 10) {
-            setLocation(Env.getWidth() / 2 - (getWidth() / 2), (Env.getHeight() - getHeight()) / 2);
-        } else {
-            setLocationRelativeTo(null);
-        }
-    }
 
 
     public void refresh(List<String> poems) {
 
         remove(poem);
-        poemLabels.clear();
 
-        PoemPanel build = PoemBuilder.build(poems,true);
-        poem = build.getPoem();
-        poemLabels = build.getPoemLabels();
+        poem = PoemBuilder.build(poems,true);
         add(poem);
 
         pack();
@@ -93,7 +80,10 @@ public class ZoomDialog extends JDialog {
         if (getWidth() < 600) {
             setSize(600,getHeight());
         }
-        resetPosition(poems);
+
+
+        setLocationRelativeTo(null);
+
     }
 
 

@@ -24,7 +24,7 @@ public class ForwardAction extends AnAction {
 
         List<String> poems = Arrays.asList(random.split(";"));
 
-        holder.add(PoemBuilder.build(poems,false).getPoem());
+        holder.add(PoemBuilder.build(poems,false));
         holder.updateUI();
 
     }

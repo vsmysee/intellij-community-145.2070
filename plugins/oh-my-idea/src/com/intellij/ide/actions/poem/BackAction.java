@@ -33,7 +33,7 @@ public class BackAction extends AnAction {
 
         List<String> poems = Arrays.asList(item.split(";"));
 
-        holder.add(PoemBuilder.build(poems,false).getPoem());
+        holder.add(PoemBuilder.build(poems,false));
         holder.updateUI();
     }
 }
