@@ -33,7 +33,81 @@ public class PoemBuilder {
     return horizontalBox;
   }
 
+  private static JComponent build2(List<String> poems) {
+    Box horizontalBox = Box.createHorizontalBox();
+
+    String title = poems.get(1);
+    int index = title.indexOf("《");
+
+    for (int i = poems.size() - 1; i > 1; i--) {
+      horizontalBox.add(convertToHtml(poems.get(i), false));
+    }
+
+    Box box = Box.createVerticalBox();
+    CirclePanel song = new CirclePanel(poems.get(0));
+    song.setMaximumSize(new Dimension(16, 16));
+    box.add(buildAuthor("   "));
+    box.add(song);
+    box.add(buildAuthor(" "));
+    box.add(buildAuthor(title.substring(0, index)));
+
+
+    horizontalBox.add(box);
+    horizontalBox.add(Box.createHorizontalStrut(15));
+
+
+    title = title.substring(index);
+    horizontalBox.add(convertToHtml(title.replace("《", "").replace("》", ""), true));
+
+    horizontalBox.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+
+    return horizontalBox;
+  }
+
+
+  private static JLabel buildAuthor(String poem) {
+    String[] split = poem.split("");
+    StringBuffer sb = new StringBuffer();
+    sb.append("<html>");
+    sb.append("<font color='grey'>");
+
+    for (String item : split) {
+      sb.append(item);
+      sb.append("<br/>");
+    }
+
+    sb.append("</font>");
+    sb.append("</html>");
+    JLabel label = buildJLabel(sb.toString(), 25);
+    return label;
+  }
+
+  private static JLabel convertToHtml(String poem, boolean title) {
+    String[] split = poem.split("");
+    StringBuffer sb = new StringBuffer();
+    sb.append("<html>");
+    if (title) {
+      sb.append("<font color='blue'>");
+    }
+
+    for (String item : split) {
+      sb.append(item);
+      sb.append("<br/>");
+    }
+
+    if (title) {
+      sb.append("</font>");
+    }
+    sb.append("</html>");
+    JLabel label = buildJLabel(sb.toString(), title ? 25 : 35);
+    return label;
+  }
+
   public static JComponent build(List<String> poems, boolean pop) {
+
+    if (poems.size() >= 12) {
+      return build2(poems);
+    }
 
     JComponent poemRoot = Box.createVerticalBox();
 
