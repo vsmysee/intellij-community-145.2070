@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CustomShortcutSet;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
@@ -53,13 +54,9 @@ public class App implements ApplicationComponent {
     action.setupHandler(handler);
 
 
-    Disposable parentDisposable = new Disposable() {
-      @Override
-      public void dispose() {
-      }
-    };
 
-    EditorFactory.getInstance().addEditorFactoryListener(new EditorFactoryAdapter() {
+
+    EditorFactoryAdapter listener = new EditorFactoryAdapter() {
 
       public void editorCreated(EditorFactoryEvent event) {
         final Editor editor = event.getEditor();
@@ -94,7 +91,10 @@ public class App implements ApplicationComponent {
 
       }
 
-    }, parentDisposable);
+    };
+
+
+    EditorFactory.getInstance().addEditorFactoryListener(listener, ApplicationManager.getApplication());
   }
 
   @Override
