@@ -1,9 +1,14 @@
 package com.intellij.ide.actions.poem;
 
+import com.intellij.ui.components.JBScrollPane;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED;
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
 
 public class PoemBuilder {
 
@@ -105,7 +110,7 @@ public class PoemBuilder {
 
   public static JComponent build(List<String> poems, boolean pop) {
 
-    if (poems.size() >= 12) {
+    if (poems.size() >= 12 && pop) {
       return build2(poems);
     }
 
@@ -182,6 +187,10 @@ public class PoemBuilder {
 
 
     poemRoot.add(poemContent);
+
+    if (poems.size() > 20) {
+      return new JBScrollPane(poemRoot,VERTICAL_SCROLLBAR_AS_NEEDED,HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    }
 
     return poemRoot;
   }

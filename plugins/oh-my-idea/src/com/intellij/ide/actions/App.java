@@ -12,6 +12,9 @@ import com.intellij.openapi.editor.actionSystem.EditorActionManager;
 import com.intellij.openapi.editor.actionSystem.TypedAction;
 import com.intellij.openapi.editor.event.EditorFactoryAdapter;
 import com.intellij.openapi.editor.event.EditorFactoryEvent;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.testFramework.LightVirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -25,7 +28,7 @@ public class App implements ApplicationComponent {
   public static EditorMode editorMode = EditorMode.COMMAND1;
 
 
-  public static enum EditorMode {
+  public enum EditorMode {
 
     INSERT,
 
@@ -60,6 +63,16 @@ public class App implements ApplicationComponent {
 
       public void editorCreated(EditorFactoryEvent event) {
         final Editor editor = event.getEditor();
+        VirtualFile file = FileDocumentManager.getInstance().getFile(editor.getDocument());
+        if (file == null || file instanceof LightVirtualFile) {
+          editorMode = EditorMode.INSERT;
+          for (Editor e : EditorFactory.getInstance().getAllEditors()) {
+            e.getSettings().setBlockCursor(false);
+          }
+
+          return;
+        }
+
         editor.getSettings().setBlockCursor(true);
 
         AnAction acton = ActionManager.getInstance().getAction(MODEACTION);
@@ -68,7 +81,7 @@ public class App implements ApplicationComponent {
           acton = new AnAction() {
             @Override
             public void actionPerformed(AnActionEvent e) {
-              App.editorMode = EditorMode.COMMAND1;
+              editorMode = EditorMode.COMMAND1;
               for (Editor editor : EditorFactory.getInstance().getAllEditors()) {
                 editor.getSettings().setBlockCursor(true);
               }

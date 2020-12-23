@@ -3,6 +3,7 @@ package com.intellij.ide.actions;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,28 +25,32 @@ public class MyTypedActionHandler implements TypedActionHandler {
   }
 
 
+  private void setCursors(App.EditorMode editorMode) {
+    for (Editor editor : EditorFactory.getInstance().getAllEditors()) {
+      editor.getSettings().setBlockCursor(editorMode != App.EditorMode.INSERT);
+    }
+  }
+
+  private static Map<Character, App.EditorMode> modMapping = new HashMap<>();
+
+  static {
+    modMapping.put('i', App.EditorMode.INSERT);
+    modMapping.put('y', App.EditorMode.COMMAND2);
+    modMapping.put('Y', App.EditorMode.COMMAND3);
+    modMapping.put('I', App.EditorMode.COMMAND4);
+  }
+
   @Override
   public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
 
     if (App.editorMode == App.EditorMode.COMMAND1) {
-      if (charTyped == 'i') {
-        editor.getSettings().setBlockCursor(false);
-        App.editorMode = App.EditorMode.INSERT;
-        return;
-      }
-      if (charTyped == 'y') {
-        App.editorMode = App.EditorMode.COMMAND2;
-        return;
-      }
-      if (charTyped == 'Y') {
-        App.editorMode = App.EditorMode.COMMAND3;
-        return;
-      }
-      if (charTyped == 'I') {
-        App.editorMode = App.EditorMode.COMMAND4;
-        return;
-      }
 
+      if (modMapping.containsKey(charTyped)) {
+        App.editorMode = modMapping.get(charTyped);
+        setCursors(App.editorMode);
+        return;
+
+      }
     }
 
     if (App.editorMode == App.EditorMode.INSERT) {
