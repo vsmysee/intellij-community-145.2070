@@ -29,6 +29,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 
 public class NewsToolWindowFactory implements ToolWindowFactory {
@@ -49,58 +51,247 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     myTable.setRowHeight(25);
     myTable.setTableHeader(null);
 
-    List<ItemInfo> itemInfoList = new ArrayList<>();
+
+    FutureTask<List<ItemInfo>> cnBlogs = new FutureTask<>(() -> {
+
+      List<ItemInfo> itemInfoList = new ArrayList<>();
+
+      try {
+        List<Document> list = Arrays.asList(Jsoup.connect("https://www.cnblogs.com").get());
+
+        for (Document doc : list) {
 
 
-    try {
-      List<Document> list = Arrays.asList(Jsoup.connect("https://www.cnblogs.com").get());
+          Elements items = doc.select("a.post-item-title");
+          for (Element item : items) {
+            ItemInfo itemInfo = new ItemInfo();
+            itemInfo.setTitle(item.text());
+            itemInfo.setDate("2012-12-25");
+            itemInfoList.add(itemInfo);
+          }
+        }
+      }
+      catch (Exception e1) {
+      }
+      return itemInfoList;
 
-      for (Document doc : list) {
+    });
+
+    new Thread(cnBlogs).start();
 
 
-        Elements items = doc.select("a.post-item-title");
+    FutureTask<List<ItemInfo>> cnBlogsNews = new FutureTask<>(() -> {
+
+      List<ItemInfo> itemInfoList = new ArrayList<>();
+
+
+      try {
+
+
+        List<String> links = Arrays.asList("https://news.cnblogs.com/", "https://news.cnblogs.com/n/page/2/");
+
+        for (String link : links) {
+
+          Document doc = Jsoup.connect(link).get();
+
+          Elements items = doc.select("h2>a[target=_blank]");
+
+
+          for (Element item : items) {
+            ItemInfo itemInfo = new ItemInfo();
+            itemInfo.setTitle(item.text());
+            itemInfo.setDate("2012-12-25");
+            itemInfoList.add(itemInfo);
+          }
+        }
+
+
+      }
+      catch (IOException e) {
+        e.printStackTrace();
+      }
+
+      return itemInfoList;
+
+    });
+
+    new Thread(cnBlogsNews).start();
+
+
+    FutureTask<List<ItemInfo>> hollischuang = new FutureTask<>(() -> {
+
+      List<ItemInfo> itemInfoList = new ArrayList<>();
+
+
+      try {
+        List<Document> list = Arrays
+          .asList(Jsoup.connect("https://www.hollischuang.com/page/1").get(), Jsoup.connect("https://www.hollischuang.com/page/2").get(),
+                  Jsoup.connect("https://www.hollischuang.com/page/3").get(), Jsoup.connect("https://www.hollischuang.com/page/4").get());
+
+        for (Document doc : list) {
+
+
+          Elements items = doc.select("h2 > a[title]");
+          for (Element item : items) {
+            ItemInfo itemInfo = new ItemInfo();
+            itemInfo.setTitle(item.attr("title"));
+            itemInfo.setDate("2012-12-25");
+            itemInfoList.add(itemInfo);
+          }
+        }
+      }
+
+      catch (IOException e) {
+        e.printStackTrace();
+      }
+
+      return itemInfoList;
+
+    });
+
+    new Thread(hollischuang).start();
+
+
+    FutureTask<List<ItemInfo>> oschina = new FutureTask<>(() -> {
+
+      List<ItemInfo> itemInfoList = new ArrayList<>();
+
+
+      try
+
+      {
+        List<Document> list = Arrays
+          .asList(Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=1&type=ajax").get(),
+                  Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=2&type=ajax").get(),
+                  Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=3&type=ajax").get(),
+                  Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=4&type=ajax").get());
+        String from = "oschina >";
+
+        for (Document doc : list) {
+
+
+          Elements items = doc.select("h3 > a");
+          for (Element item : items) {
+            ItemInfo itemInfo = new ItemInfo();
+            itemInfo.setTitle(from + item.attr("title"));
+            itemInfo.setDate("2012-12-25");
+            itemInfoList.add(itemInfo);
+          }
+        }
+      }
+
+      catch (IOException e)
+
+      {
+        e.printStackTrace();
+      }
+
+      return itemInfoList;
+
+    });
+
+    new Thread(oschina).start();
+
+
+    FutureTask<List<ItemInfo>> cto51 = new FutureTask<>(() -> {
+
+      List<ItemInfo> itemInfoList = new ArrayList<>();
+
+      try
+
+      {
+
+        List<String> list = Arrays.asList(HttpRequest.get(
+          "https://www.51cto.com/api/v1/index.php?c=index&a=articleFeed&sign=11111&timestamp=1&tag=translation&limit=10&page=1").send()
+                                            .bodyText(), HttpRequest.get(
+          "https://www.51cto.com/api/v1/index.php?c=index&a=articleFeed&sign=11111&timestamp=1&tag=translation&limit=10&page=2").send()
+                                            .bodyText(), HttpRequest.get(
+          "https://www.51cto.com/api/v1/index.php?c=index&a=articleFeed&sign=11111&timestamp=1&tag=translation&limit=10&page=3").send()
+                                            .bodyText());
+
+
+        String from = "51cto >";
+
+
+        for (String apiRes : list) {
+
+
+          JSONArray array = new JSONArray(apiRes);
+          for (int i = 0; i < array.length(); i++) {
+
+
+            JSONObject jo = array.getJSONObject(i);
+
+            ItemInfo itemInfo = new ItemInfo();
+            itemInfo.setTitle(from + jo.getString("title"));
+            itemInfo.setDate("2012-12-25");
+            itemInfoList.add(itemInfo);
+          }
+        }
+      }
+
+      catch (Exception e)
+
+      {
+        e.printStackTrace();
+      }
+
+      return itemInfoList;
+
+    });
+
+    new Thread(cto51).start();
+
+
+    FutureTask<List<ItemInfo>> jdon = new FutureTask<>(() -> {
+
+      List<ItemInfo> itemInfoList = new ArrayList<>();
+
+      try
+
+      {
+        Document doc = Jsoup.connect("https://www.jdon.com/").get();
+
+        Elements important = doc.select("div.important");
+
+        String from = "jdon >";
+
+        Element first = important.first();
+
+        Elements items = first.select("a");
+
         for (Element item : items) {
           ItemInfo itemInfo = new ItemInfo();
-          itemInfo.setTitle(item.text());
+          itemInfo.setTitle(from + item.text());
           itemInfo.setDate("2012-12-25");
           itemInfoList.add(itemInfo);
         }
       }
 
+      catch (IOException e)
 
-      List<String> links = Arrays.asList("https://news.cnblogs.com/", "https://news.cnblogs.com/n/page/2/");
-
-      for (String link : links) {
-
-        Document doc = Jsoup.connect(link).get();
-
-        Elements items = doc.select("h2>a[target=_blank]");
-
-
-        for (Element item : items) {
-          ItemInfo itemInfo = new ItemInfo();
-          itemInfo.setTitle(item.text());
-          itemInfo.setDate("2012-12-25");
-          itemInfoList.add(itemInfo);
-        }
+      {
+        e.printStackTrace();
       }
 
+      return itemInfoList;
 
-    }
-    catch (IOException e) {
-      e.printStackTrace();
-    }
+    });
 
-
-    try {
-      List<Document> list = Arrays
-        .asList(Jsoup.connect("https://www.hollischuang.com/page/1").get(), Jsoup.connect("https://www.hollischuang.com/page/2").get(),
-                Jsoup.connect("https://www.hollischuang.com/page/3").get(), Jsoup.connect("https://www.hollischuang.com/page/4").get());
-
-      for (Document doc : list) {
+    new Thread(jdon).start();
 
 
-        Elements items = doc.select("h2 > a[title]");
+    FutureTask<List<ItemInfo>> toutiao = new FutureTask<>(() -> {
+
+      List<ItemInfo> itemInfoList = new ArrayList<>();
+
+
+      try
+
+      {
+        Document doc = Jsoup.connect("https://toutiao.io/").get();
+
+        Elements items = doc.select("a[rel=external]");
         for (Element item : items) {
           ItemInfo itemInfo = new ItemInfo();
           itemInfo.setTitle(item.attr("title"));
@@ -108,157 +299,91 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
           itemInfoList.add(itemInfo);
         }
       }
-    }
-    catch (IOException e) {
-      e.printStackTrace();
-    }
+
+      catch (IOException e)
+
+      {
+        e.printStackTrace();
+      }
+
+      return itemInfoList;
+
+    });
+
+    new Thread(toutiao).start();
 
 
-    try {
-      List<Document> list = Arrays
-        .asList(Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=1&type=ajax").get(),
-                Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=2&type=ajax").get(),
-                Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=3&type=ajax").get(),
-                Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=4&type=ajax").get());
-      String from = "oschina >";
+    FutureTask<List<ItemInfo>> thoughtworks = new FutureTask<>(() -> {
 
-      for (Document doc : list) {
+      List<ItemInfo> itemInfoList = new ArrayList<>();
 
 
-        Elements items = doc.select("h3 > a");
+      try
+
+      {
+        Document doc = Jsoup.connect("https://insights.thoughtworks.cn/").get();
+        String from = "thoughtworks >";
+
+        Elements items = doc.select("a[rel=bookmark]");
         for (Element item : items) {
           ItemInfo itemInfo = new ItemInfo();
-          itemInfo.setTitle(from + item.attr("title"));
+          itemInfo.setTitle(from + item.text());
           itemInfo.setDate("2012-12-25");
           itemInfoList.add(itemInfo);
         }
       }
-    }
-    catch (IOException e) {
-      e.printStackTrace();
-    }
 
-    try {
+      catch (IOException e)
 
-      List<String> list = Arrays.asList(HttpRequest.get(
-        "https://www.51cto.com/api/v1/index.php?c=index&a=articleFeed&sign=11111&timestamp=1&tag=translation&limit=10&page=1").send()
-                                          .bodyText(), HttpRequest.get(
-        "https://www.51cto.com/api/v1/index.php?c=index&a=articleFeed&sign=11111&timestamp=1&tag=translation&limit=10&page=2").send()
-                                          .bodyText(), HttpRequest.get(
-        "https://www.51cto.com/api/v1/index.php?c=index&a=articleFeed&sign=11111&timestamp=1&tag=translation&limit=10&page=3").send()
-                                          .bodyText());
+      {
+        e.printStackTrace();
+      }
+
+      return itemInfoList;
+
+    });
+
+    new Thread(thoughtworks).start();
 
 
-      String from = "51cto >";
+    FutureTask<List<ItemInfo>> tuicool = new FutureTask<>(() -> {
+
+      List<ItemInfo> itemInfoList = new ArrayList<>();
 
 
-      for (String apiRes : list) {
+      try
 
+      {
+        Document doc = Jsoup.connect("https://www.tuicool.com/ah/20/").get();
 
-        JSONArray array = new JSONArray(apiRes);
-        for (int i = 0; i < array.length(); i++) {
-
-
-          JSONObject jo = array.getJSONObject(i);
-
+        Elements items = doc.select("a[style=display: block]");
+        for (Element item : items) {
           ItemInfo itemInfo = new ItemInfo();
-          itemInfo.setTitle(from + jo.getString("title"));
+          itemInfo.setTitle(item.text());
           itemInfo.setDate("2012-12-25");
           itemInfoList.add(itemInfo);
         }
       }
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
 
+      catch (IOException e)
 
-    try {
-      Document doc = Jsoup.connect("https://www.jdon.com/").get();
-
-      Elements important = doc.select("div.important");
-
-      String from = "jdon >";
-
-      Element first = important.first();
-
-      Elements items = first.select("a");
-
-      for (Element item : items) {
-        ItemInfo itemInfo = new ItemInfo();
-        itemInfo.setTitle(from + item.text());
-        itemInfo.setDate("2012-12-25");
-        itemInfoList.add(itemInfo);
+      {
+        e.printStackTrace();
       }
-    }
-    catch (IOException e) {
-      e.printStackTrace();
-    }
+
+      return itemInfoList;
+
+    });
+
+    new Thread(tuicool).start();
 
 
-    try {
-      Document doc = Jsoup.connect("https://toutiao.io/").get();
 
-      Elements items = doc.select("a[rel=external]");
-      for (Element item : items) {
-        ItemInfo itemInfo = new ItemInfo();
-        itemInfo.setTitle(item.attr("title"));
-        itemInfo.setDate("2012-12-25");
-        itemInfoList.add(itemInfo);
-      }
-    }
-    catch (IOException e) {
-      e.printStackTrace();
-    }
+    List<ItemInfo> itemInfoList = new ArrayList<>();
 
-    try {
-      Document doc = Jsoup.connect("https://insights.thoughtworks.cn/").get();
-      String from = "thoughtworks >";
+    try
 
-      Elements items = doc.select("a[rel=bookmark]");
-      for (Element item : items) {
-        ItemInfo itemInfo = new ItemInfo();
-        itemInfo.setTitle(from + item.text());
-        itemInfo.setDate("2012-12-25");
-        itemInfoList.add(itemInfo);
-      }
-    }
-    catch (IOException e) {
-      e.printStackTrace();
-    }
-
-
-    try {
-      Document doc = Jsoup.connect("https://www.tuicool.com/ah/20/").get();
-
-      Elements items = doc.select("a[style=display: block]");
-      for (Element item : items) {
-        ItemInfo itemInfo = new ItemInfo();
-        itemInfo.setTitle(item.text());
-        itemInfo.setDate("2012-12-25");
-        itemInfoList.add(itemInfo);
-      }
-    }
-    catch (IOException e) {
-      e.printStackTrace();
-    }
-
-
-    try {
-
-      String apiRes = HttpRequest.post("https://s.geekbang.org/api/gksearch/search").header("User-Agent",
-                                                                                            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36")
-        .header("Referer", "https://s.geekbang.org/search/c=0/k=android/t=").header("Content-Type", "application/json;charset=UTF-8")
-        .body("{\"q\":\"android\",\"t\":0,\"s\":20,\"p\":1}").send().bodyText();
-
-
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-
-
-    try {
+    {
 
       URL url = new URL("https://api.readhub.cn/technews?lastCursor=@null&pageSize=20");
       HttpURLConnection con = (HttpURLConnection)url.openConnection();
@@ -290,9 +415,117 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
       }
 
     }
+
     catch (Exception e) {
       e.printStackTrace();
     }
+
+
+    try {
+      List<ItemInfo> itemInfos = cnBlogs.get();
+      itemInfoList.addAll(itemInfos);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      List<ItemInfo> itemInfos = cnBlogsNews.get();
+      itemInfoList.addAll(itemInfos);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+
+
+    try {
+      List<ItemInfo> itemInfos = hollischuang.get();
+      itemInfoList.addAll(itemInfos);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      List<ItemInfo> itemInfos = oschina.get();
+      itemInfoList.addAll(itemInfos);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      List<ItemInfo> itemInfos = cto51.get();
+      itemInfoList.addAll(itemInfos);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+
+    try {
+      List<ItemInfo> itemInfos = jdon.get();
+      itemInfoList.addAll(itemInfos);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+
+
+    try {
+      List<ItemInfo> itemInfos = toutiao.get();
+      itemInfoList.addAll(itemInfos);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+
+
+    try {
+      List<ItemInfo> itemInfos = thoughtworks.get();
+      itemInfoList.addAll(itemInfos);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+
+
+    try {
+      List<ItemInfo> itemInfos = tuicool.get();
+      itemInfoList.addAll(itemInfos);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    catch (ExecutionException e) {
+      e.printStackTrace();
+    }
+
+
+
 
 
     ColumnInfo<ItemInfo, String> title = new ColumnInfo<ItemInfo, String>("title") {
