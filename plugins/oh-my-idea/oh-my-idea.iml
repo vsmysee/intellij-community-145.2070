@@ -9,6 +9,18 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="openapi" />
     <orderEntry type="module" module-name="java-impl" />
+        <orderEntry type="module-library" exported="">
+          <library name="Json">
+            <CLASSES>
+              <root url="jar://$MODULE_DIR$/lib/json.jar!/" />
+              <root url="jar://$MODULE_DIR$/lib/jsoup.jar!/" />
+              <root url="jar://$MODULE_DIR$/lib/jodd-core-4.0.0.jar!/" />
+              <root url="jar://$MODULE_DIR$/lib/jodd-http-4.0.0.jar!/" />
+            </CLASSES>
+            <JAVADOC />
+            <SOURCES />
+          </library>
+        </orderEntry>
   </component>
   <component name="copyright">
     <Base>
