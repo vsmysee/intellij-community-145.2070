@@ -14,6 +14,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <toolWindow id="ChinaPoem" anchor="right" factoryClass="com.intellij.ide.actions.poem.PoemToolWindowFactory"/>
+    <toolWindow id="News" anchor="bottom" factoryClass="com.intellij.ide.actions.news.NewsToolWindowFactory"/>
   </extensions>
 
   <actions>
