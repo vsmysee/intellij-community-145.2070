@@ -1,5 +1,9 @@
 package com.intellij.ide.actions.news;
 
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
@@ -35,167 +39,173 @@ import java.util.concurrent.FutureTask;
 
 public class NewsToolWindowFactory implements ToolWindowFactory {
 
+  interface GetContent {
+
+    void run(List<ItemInfo> list) throws Exception;
+
+  }
+
+  private FutureTask<List<ItemInfo>> buildTask(GetContent runnable) {
+    FutureTask<List<ItemInfo>> task = new FutureTask<>(() -> {
+
+      List<ItemInfo> itemInfoList = new ArrayList<>();
+
+      try {
+        runnable.run(itemInfoList);
+      }
+      catch (Exception e) {
+      }
+      return itemInfoList;
+
+    });
+    new Thread(task).start();
+
+    return task;
+  }
 
   @Override
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
 
+    ColumnInfo<ItemInfo, String> title = new ColumnInfo<ItemInfo, String>("title") {
+      @Nullable
+      @Override
+      public String valueOf(ItemInfo item) {
+        return item.getTitle();
+      }
+    };
+
+    ColumnInfo<ItemInfo, String> date = new ColumnInfo<ItemInfo, String>("date") {
+      @Nullable
+      @Override
+      public String valueOf(ItemInfo item) {
+        return item.getDate();
+      }
+
+      @Override
+      public int getWidth(JTable table) {
+        return 100;
+      }
+    };
+
+    TableView newsTable = getTableView();
+    TableView bookTable = getTableView();
+    TableView blogTable = getTableView();
 
 
     List<FutureTask<List<ItemInfo>>> tasks = new ArrayList<>();
-    List<FutureTask<List<ItemInfo>>> bookTasks = new ArrayList<>();
-
-    FutureTask<List<ItemInfo>> cnBlogs = new FutureTask<>(() -> {
-
-      List<ItemInfo> itemInfoList = new ArrayList<>();
-
-      try {
-        List<Document> list = Arrays.asList(Jsoup.connect("https://www.cnblogs.com").get());
-
-        for (Document doc : list) {
 
 
-          Elements items = doc.select("a.post-item-title");
-          for (Element item : items) {
-            ItemInfo itemInfo = new ItemInfo();
-            itemInfo.setTitle(item.text());
-            itemInfo.setDate("2012-12-25");
-            itemInfoList.add(itemInfo);
-          }
+    tasks.add(buildTask(list -> {
+
+      for (Document doc : Arrays.asList(Jsoup.connect("https://www.cnblogs.com").get())) {
+
+        Elements items = doc.select("a.post-item-title");
+        for (Element item : items) {
+          ItemInfo itemInfo = new ItemInfo();
+          itemInfo.setTitle("cnblogs>" + item.text());
+          itemInfo.setDate("2012-12-25");
+          list.add(itemInfo);
         }
       }
-      catch (Exception e1) {
-      }
-      return itemInfoList;
-
-    });
-    tasks.add(cnBlogs);
-
-    new Thread(cnBlogs).start();
+    }));
 
 
-    FutureTask<List<ItemInfo>> cnBlogsNews = new FutureTask<>(() -> {
+    tasks.add(buildTask(list -> {
 
-      List<ItemInfo> itemInfoList = new ArrayList<>();
+      for (Document doc : Arrays.asList(Jsoup.connect("https://it.ithome.com").get())) {
 
-
-      try {
-
-
-        List<String> links = Arrays.asList("https://news.cnblogs.com/", "https://news.cnblogs.com/n/page/2/");
-
-        for (String link : links) {
-
-          Document doc = Jsoup.connect(link).get();
-
-          Elements items = doc.select("h2>a[target=_blank]");
-
-
-          for (Element item : items) {
-            ItemInfo itemInfo = new ItemInfo();
-            itemInfo.setTitle(item.text());
-            itemInfo.setDate("2012-12-25");
-            itemInfoList.add(itemInfo);
-          }
+        Elements items = doc.select("ul.bl > li > a.img > img");
+        for (Element item : items) {
+          ItemInfo itemInfo = new ItemInfo();
+          itemInfo.setTitle("ithome>" + item.attr("alt"));
+          itemInfo.setDate("2012-12-25");
+          list.add(itemInfo);
         }
-
-
       }
-      catch (IOException e) {
-        e.printStackTrace();
+    }));
+
+
+    tasks.add(buildTask(list -> {
+
+      for (Document doc : Arrays.asList(Jsoup.connect("https://www.donews.com/").get())) {
+
+        Elements items = doc.select("div.info > p.title");
+        for (Element item : items) {
+          ItemInfo itemInfo = new ItemInfo();
+          itemInfo.setTitle("donews>" + item.text());
+          itemInfo.setDate("2012-12-25");
+          list.add(itemInfo);
+        }
       }
-
-      return itemInfoList;
-
-    });
-
-    new Thread(cnBlogsNews).start();
-    tasks.add(cnBlogsNews);
+    }));
 
 
-    FutureTask<List<ItemInfo>> hollischuang = new FutureTask<>(() -> {
+    tasks.add(buildTask(list -> {
 
-      List<ItemInfo> itemInfoList = new ArrayList<>();
+      List<String> links = Arrays.asList("https://news.cnblogs.com/", "https://news.cnblogs.com/n/page/2/");
 
+      for (String link : links) {
 
-      try {
-        List<Document> list = Arrays
-          .asList(Jsoup.connect("https://www.hollischuang.com/page/1").get(), Jsoup.connect("https://www.hollischuang.com/page/2").get(),
-                  Jsoup.connect("https://www.hollischuang.com/page/3").get(), Jsoup.connect("https://www.hollischuang.com/page/4").get());
+        Document doc = Jsoup.connect(link).get();
+        Elements items = doc.select("h2>a[target=_blank]");
 
-        for (Document doc : list) {
-
-
-          Elements items = doc.select("h2 > a[title]");
-          for (Element item : items) {
-            ItemInfo itemInfo = new ItemInfo();
-            itemInfo.setTitle(item.attr("title"));
-            itemInfo.setDate("2012-12-25");
-            itemInfoList.add(itemInfo);
-          }
+        for (Element item : items) {
+          ItemInfo itemInfo = new ItemInfo();
+          itemInfo.setTitle("cnblogs>" + item.text());
+          itemInfo.setDate("2012-12-25");
+          list.add(itemInfo);
         }
       }
 
-      catch (IOException e) {
-        e.printStackTrace();
-      }
-
-      return itemInfoList;
-
-    });
-
-    new Thread(hollischuang).start();
-    tasks.add(hollischuang);
+    }));
 
 
-    FutureTask<List<ItemInfo>> oschina = new FutureTask<>(() -> {
+    tasks.add(buildTask(list -> {
 
-      List<ItemInfo> itemInfoList = new ArrayList<>();
+      List<Document> lists = Arrays
+        .asList(Jsoup.connect("https://www.hollischuang.com/page/1").get(), Jsoup.connect("https://www.hollischuang.com/page/2").get(),
+                Jsoup.connect("https://www.hollischuang.com/page/3").get(), Jsoup.connect("https://www.hollischuang.com/page/4").get());
 
-
-      try
-
-      {
-        List<Document> list = Arrays
-          .asList(Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=1&type=ajax").get(),
-                  Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=2&type=ajax").get(),
-                  Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=3&type=ajax").get(),
-                  Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=4&type=ajax").get());
-        String from = "oschina >";
-
-        for (Document doc : list) {
-
-
-          Elements items = doc.select("h3 > a");
-          for (Element item : items) {
-            ItemInfo itemInfo = new ItemInfo();
-            itemInfo.setTitle(from + item.attr("title"));
-            itemInfo.setDate("2012-12-25");
-            itemInfoList.add(itemInfo);
-          }
+      for (Document doc : lists) {
+        Elements items = doc.select("h2 > a[title]");
+        for (Element item : items) {
+          ItemInfo itemInfo = new ItemInfo();
+          itemInfo.setTitle("hollischuang>" + item.attr("title"));
+          itemInfo.setDate("2012-12-25");
+          list.add(itemInfo);
         }
       }
 
-      catch (IOException e)
+    }));
 
-      {
-        e.printStackTrace();
+
+    tasks.add(buildTask(list -> {
+
+      List<Document> lists = Arrays
+        .asList(Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=1&type=ajax").get(),
+                Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=2&type=ajax").get(),
+                Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=3&type=ajax").get(),
+                Jsoup.connect("https://www.oschina.net/news/widgets/_news_index_generic_list?p=4&type=ajax").get());
+      String from = "oschina >";
+
+      for (Document doc : lists) {
+        Elements items = doc.select("h3 > a");
+        for (Element item : items) {
+          ItemInfo itemInfo = new ItemInfo();
+          itemInfo.setTitle(from + item.attr("title"));
+          itemInfo.setDate("2012-12-25");
+          list.add(itemInfo);
+        }
       }
 
-      return itemInfoList;
-
-    });
-
-    new Thread(oschina).start();
-    tasks.add(oschina);
+    }));
 
 
     FutureTask<List<ItemInfo>> cto51 = new FutureTask<>(() -> {
 
       List<ItemInfo> itemInfoList = new ArrayList<>();
 
-      try
-
-      {
+      try {
 
         List<String> list = Arrays.asList(HttpRequest.get(
           "https://www.51cto.com/api/v1/index.php?c=index&a=articleFeed&sign=11111&timestamp=1&tag=translation&limit=10&page=1").send()
@@ -205,16 +215,12 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
           "https://www.51cto.com/api/v1/index.php?c=index&a=articleFeed&sign=11111&timestamp=1&tag=translation&limit=10&page=3").send()
                                             .bodyText());
 
-
         String from = "51cto >";
-
 
         for (String apiRes : list) {
 
-
           JSONArray array = new JSONArray(apiRes);
           for (int i = 0; i < array.length(); i++) {
-
 
             JSONObject jo = array.getJSONObject(i);
 
@@ -226,9 +232,7 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
         }
       }
 
-      catch (Exception e)
-
-      {
+      catch (Exception e) {
         e.printStackTrace();
       }
 
@@ -237,7 +241,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     });
 
     tasks.add(cto51);
-
     new Thread(cto51).start();
 
 
@@ -245,9 +248,7 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
       List<ItemInfo> itemInfoList = new ArrayList<>();
 
-      try
-
-      {
+      try {
         Document doc = Jsoup.connect("https://www.jdon.com/").get();
 
         Elements important = doc.select("div.important");
@@ -266,9 +267,7 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
         }
       }
 
-      catch (IOException e)
-
-      {
+      catch (IOException e) {
         e.printStackTrace();
       }
 
@@ -277,7 +276,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     });
 
     new Thread(jdon).start();
-
     tasks.add(jdon);
 
 
@@ -285,10 +283,7 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
       List<ItemInfo> itemInfoList = new ArrayList<>();
 
-
-      try
-
-      {
+      try {
         Document doc = Jsoup.connect("https://toutiao.io/").get();
 
         Elements items = doc.select("a[rel=external]");
@@ -300,9 +295,7 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
         }
       }
 
-      catch (IOException e)
-
-      {
+      catch (IOException e) {
         e.printStackTrace();
       }
 
@@ -432,7 +425,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
       List<ItemInfo> itemInfoList = new ArrayList<>();
 
-
       String from = "ibm >";
       try
 
@@ -472,7 +464,7 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
       {
 
-        List<String> links = Arrays.asList("https://thenewstack.io/","https://thenewstack.io/page/2","https://thenewstack.io/page/3" );
+        List<String> links = Arrays.asList("https://thenewstack.io/", "https://thenewstack.io/page/2", "https://thenewstack.io/page/3");
         for (String link : links) {
           Document doc = Jsoup.connect(link).get();
           Elements items = doc.select("h2.small > a");
@@ -493,21 +485,21 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
     });
 
-    new Thread(thenewstack).start();
-    tasks.add(thenewstack);
+    // new Thread(thenewstack).start();
+    //tasks.add(thenewstack);
 
 
     FutureTask<List<ItemInfo>> dockerone = new FutureTask<>(() -> {
 
       List<ItemInfo> itemInfoList = new ArrayList<>();
 
-
       String from = "dockerone >";
       try
 
       {
 
-        List<String> links = Arrays.asList("http://dockerone.com/","http://dockerone.com/sort_type-new__day-0__is_recommend-0__page-2","http://dockerone.com/sort_type-new__day-0__is_recommend-0__page-3");
+        List<String> links = Arrays.asList("http://dockerone.com/", "http://dockerone.com/sort_type-new__day-0__is_recommend-0__page-2",
+                                           "http://dockerone.com/sort_type-new__day-0__is_recommend-0__page-3");
         for (String link : links) {
           Document doc = Jsoup.connect(link).get();
           Elements items = doc.select("h4 > a");
@@ -535,7 +527,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     FutureTask<List<ItemInfo>> lobste = new FutureTask<>(() -> {
 
       List<ItemInfo> itemInfoList = new ArrayList<>();
-
 
       String from = "lobste >";
       try
@@ -598,190 +589,334 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
     });
 
-    new Thread(ycombinator).start();
-    tasks.add(ycombinator);
+    //new Thread(ycombinator).start();
+    //tasks.add(ycombinator);
 
 
-    FutureTask<List<ItemInfo>> tbooks = new FutureTask<>(() -> {
+    Task.Backgroundable backBookTask = new Task.Backgroundable(null, "Loading book", true) {
+      @Override
+      public void run(@NotNull final ProgressIndicator indicator) {
+        List<ItemInfo> itemInfoList = new ArrayList<>();
+
+        try
+
+        {
+          {
+            String from = "tlbooks >";
+
+            List<String> links = Arrays
+              .asList("https://www.ituring.com.cn/book", "https://www.ituring.com.cn/book?tab=book&sort=hot&page=1",
+                      "https://www.ituring.com.cn/book?tab=book&sort=hot&page=2");
+            for (String link : links) {
+              Document doc = Jsoup.connect(link).get();
+              Elements items = doc.select("h4.name > a");
+              for (Element item : items) {
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setTitle(from + item.text());
+                itemInfo.setDate("2012-12-25");
+                itemInfoList.add(itemInfo);
+              }
+            }
+          }
+
+
+          {
+            String from = "tbooks >";
+
+            List<String> links2 = Arrays.asList("https://www.tuicool.com/books");
+            for (String link : links2) {
+              Document doc = Jsoup.connect(link).get();
+              Elements items = doc.select("div.title > a");
+              for (Element item : items) {
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setTitle(from + item.text());
+                itemInfo.setDate("2012-12-25");
+                itemInfoList.add(itemInfo);
+              }
+            }
+
+
+          }
+
+          {
+            String from = "ebooks >";
+
+            List<String> links2 = Arrays.asList("https://it-ebooks.info");
+            for (String link : links2) {
+              Document doc = Jsoup.connect(link).get();
+              Elements items = doc.select("div.top_box > a");
+              for (Element item : items) {
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setTitle(from + item.text());
+                itemInfo.setDate("2012-12-25");
+                itemInfoList.add(itemInfo);
+              }
+
+
+            }
+
+          }
+        }
+
+        catch (Exception e) {
+          e.printStackTrace();
+        }
+
+
+        ApplicationManager.getApplication().invokeLater(new Runnable() {
+          @Override
+          public void run() {
+            final ListTableModel<ItemInfo> bookModel = new ListTableModel<>(new ColumnInfo[]{title, date}, itemInfoList);
+            bookTable.setModelAndUpdateColumns(bookModel);
+          }
+        });
+
+      }
+    };
+
+    ProgressManager.getInstance().run(backBookTask);
+
+
+    FutureTask<List<ItemInfo>> readhub = new FutureTask<>(() -> {
 
       List<ItemInfo> itemInfoList = new ArrayList<>();
 
-
-      String from = "tbooks >";
       try
 
       {
 
-        List<String> links = Arrays.asList("https://www.tuicool.com/books");
-        for (String link : links) {
-          Document doc = Jsoup.connect(link).get();
-          Elements items = doc.select("div.title > a");
-          for (Element item : items) {
-            ItemInfo itemInfo = new ItemInfo();
-            itemInfo.setTitle(from + item.text());
-            itemInfo.setDate("2012-12-25");
-            itemInfoList.add(itemInfo);
-          }
+        URL url = new URL("https://api.readhub.cn/technews?lastCursor=@null&pageSize=20");
+        HttpURLConnection con = (HttpURLConnection)url.openConnection();
+
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Content-Type", "application/json");
+        con.setRequestProperty("Accept", "application/json");
+
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+          sb.append(line + "\n");
         }
+        br.close();
+
+        String apiRes = sb.toString();
+        JSONObject jo = new JSONObject(apiRes);
+        JSONArray data = jo.getJSONArray("data");
+        for (int i = 0; i < data.length(); i++) {
+          JSONObject o = (JSONObject)data.get(i);
+
+          ItemInfo itemInfo = new ItemInfo();
+          itemInfo.setTitle("redhub >" + o.getString("title"));
+          itemInfo.setDate(o.getString("publishDate"));
+          itemInfoList.add(itemInfo);
+
+        }
+
       }
 
-      catch (IOException e) {
+      catch (Exception e) {
         e.printStackTrace();
       }
-
       return itemInfoList;
 
     });
 
-    new Thread(tbooks).start();
-    bookTasks.add(tbooks);
+    new Thread(readhub).start();
+    tasks.add(readhub);
 
 
-
-    FutureTask<List<ItemInfo>> tlbooks = new FutureTask<>(() -> {
-
-      List<ItemInfo> itemInfoList = new ArrayList<>();
-
-
-      String from = "tlbooks >";
-      try
-
-      {
-
-        List<String> links = Arrays.asList("https://www.ituring.com.cn/book","https://www.ituring.com.cn/book?tab=book&sort=hot&page=1","https://www.ituring.com.cn/book?tab=book&sort=hot&page=2");
-        for (String link : links) {
-          Document doc = Jsoup.connect(link).get();
-          Elements items = doc.select("h4.name > a");
-          for (Element item : items) {
-            ItemInfo itemInfo = new ItemInfo();
-            itemInfo.setTitle(from + item.text());
-            itemInfo.setDate("2012-12-25");
-            itemInfoList.add(itemInfo);
+    Task.Backgroundable backNewTask = new Task.Backgroundable(null, "Loading news", true) {
+      @Override
+      public void run(@NotNull final ProgressIndicator indicator) {
+        List<ItemInfo> allItems = new ArrayList<>();
+        for (FutureTask<List<ItemInfo>> task : tasks) {
+          try {
+            List<ItemInfo> itemInfos = task.get();
+            allItems.addAll(itemInfos);
+          }
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          catch (ExecutionException e) {
+            e.printStackTrace();
           }
         }
-      }
-
-      catch (IOException e) {
-        e.printStackTrace();
-      }
-
-      return itemInfoList;
-
-    });
-
-    new Thread(tlbooks).start();
-    bookTasks.add(tlbooks);
-
-    List<ItemInfo> itemInfoList = new ArrayList<>();
-    List<ItemInfo> books = new ArrayList<>();
-
-    try
-
-    {
-
-      URL url = new URL("https://api.readhub.cn/technews?lastCursor=@null&pageSize=20");
-      HttpURLConnection con = (HttpURLConnection)url.openConnection();
-
-      con.setRequestMethod("GET");
-      con.setRequestProperty("Content-Type", "application/json");
-      con.setRequestProperty("Accept", "application/json");
 
 
-      BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-      StringBuilder sb = new StringBuilder();
-      String line;
-      while ((line = br.readLine()) != null) {
-        sb.append(line + "\n");
-      }
-      br.close();
+        ApplicationManager.getApplication().invokeLater(new Runnable() {
+          @Override
+          public void run() {
+            final ListTableModel<ItemInfo> newModel = new ListTableModel<>(new ColumnInfo[]{title, date}, allItems);
+            newsTable.setModelAndUpdateColumns(newModel);
+          }
+        });
 
-      String apiRes = sb.toString();
-      JSONObject jo = new JSONObject(apiRes);
-      JSONArray data = jo.getJSONArray("data");
-      for (int i = 0; i < data.length(); i++) {
-        JSONObject o = (JSONObject)data.get(i);
-
-        ItemInfo itemInfo = new ItemInfo();
-        itemInfo.setTitle("redhub >" + o.getString("title"));
-        itemInfo.setDate(o.getString("publishDate"));
-        itemInfoList.add(itemInfo);
-
-      }
-
-    }
-
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-
-
-    for (FutureTask<List<ItemInfo>> task : tasks) {
-      try {
-        List<ItemInfo> itemInfos = task.get();
-        itemInfoList.addAll(itemInfos);
-      }
-      catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      catch (ExecutionException e) {
-        e.printStackTrace();
-      }
-    }
-
-    for (FutureTask<List<ItemInfo>> task : bookTasks) {
-      try {
-        List<ItemInfo> itemInfos = task.get();
-        books.addAll(itemInfos);
-      }
-      catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      catch (ExecutionException e) {
-        e.printStackTrace();
-      }
-    }
-
-
-
-
-    ColumnInfo<ItemInfo, String> title = new ColumnInfo<ItemInfo, String>("title") {
-      @Nullable
-      @Override
-      public String valueOf(ItemInfo item) {
-        return item.getTitle();
       }
     };
 
-    ColumnInfo<ItemInfo, String> date = new ColumnInfo<ItemInfo, String>("date") {
-      @Nullable
-      @Override
-      public String valueOf(ItemInfo item) {
-        return item.getDate();
-      }
+    ProgressManager.getInstance().run(backNewTask);
 
+
+    Task.Backgroundable blogkTask = new Task.Backgroundable(null, "Loading blog", true) {
       @Override
-      public int getWidth(JTable table) {
-        return 100;
+      public void run(@NotNull final ProgressIndicator indicator) {
+        List<ItemInfo> itemInfoList = new ArrayList<>();
+
+        try {
+
+
+          {
+
+            String from = "manateelazycat >";
+
+            List<String> links2 = Arrays.asList("https://manateelazycat.github.io/index.html");
+            for (String link : links2) {
+              Document doc = Jsoup.connect(link).get();
+
+              Elements select = doc.select("li.post-line");
+
+              for (Element item : select) {
+
+                Elements items = item.select("a.post-title");
+                Elements dates = item.select("div.post-date");
+
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setTitle(from + items.first().text());
+                itemInfo.setDate(dates.first().text());
+                itemInfoList.add(itemInfo);
+              }
+            }
+
+          }
+
+          {
+
+            String from = "yinwang >";
+
+            List<String> links2 = Arrays.asList("http://www.yinwang.org");
+            for (String link : links2) {
+              Document doc = Jsoup.connect(link).get();
+
+              Elements select = doc.select("li.list-group-item");
+
+              for (Element item : select) {
+
+                Elements items = item.select("a");
+                Elements dates = item.select("div.date");
+
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setTitle(from + items.first().text());
+                itemInfo.setDate(dates.first().text());
+                itemInfoList.add(itemInfo);
+              }
+            }
+
+          }
+
+          {
+
+            String from = "jetbrains >";
+
+            List<String> links2 = Arrays.asList("https://blog.jetbrains.com/idea/category/releases/");
+            for (String link : links2) {
+              Document doc = Jsoup.connect(link).get();
+
+              Elements select = doc.select("article");
+
+              for (Element item : select) {
+
+                Elements items = item.select("h3");
+                Elements dates = item.select("time");
+
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setTitle(from + items.first().text());
+                itemInfo.setDate(dates.first().text());
+                itemInfoList.add(itemInfo);
+              }
+            }
+
+          }
+
+          {
+
+            String from = "spring >";
+
+            List<String> links2 = Arrays.asList("https://spring.io/blog/category/releases");
+            for (String link : links2) {
+              Document doc = Jsoup.connect(link).get();
+
+              Elements select = doc.select("article.blog--container");
+
+              for (Element item : select) {
+
+                Elements items = item.select("h2.blog--title > a");
+                Elements dates = item.select("time");
+
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setTitle(from + items.first().text());
+                itemInfo.setDate(dates.first().text());
+                itemInfoList.add(itemInfo);
+              }
+            }
+
+          }
+
+
+          {
+
+            String from = "itpub >";
+
+            List<String> links2 = Arrays.asList("https://z.itpub.net/");
+            for (String link : links2) {
+              Document doc = Jsoup.connect(link).get();
+
+              Elements select = doc.select("li.has-img");
+
+              for (Element item : select) {
+
+                Elements items = item.select("h4");
+                Elements dates = item.select("span.time");
+
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setTitle(from + items.first().text());
+                itemInfo.setDate(dates.first().text());
+                itemInfoList.add(itemInfo);
+              }
+            }
+
+          }
+
+
+        }
+        catch (Exception e) {
+          e.printStackTrace();
+        }
+
+
+        ApplicationManager.getApplication().invokeLater(new Runnable() {
+          @Override
+          public void run() {
+            final ListTableModel<ItemInfo> bookModel = new ListTableModel<>(new ColumnInfo[]{title, date}, itemInfoList);
+            blogTable.setModelAndUpdateColumns(bookModel);
+          }
+        });
+
       }
     };
 
-    TableView newsTable = getTableView();
-    TableView bookTable = getTableView();
-
-
-
-    final ListTableModel<ItemInfo> flatModel = new ListTableModel<>(new ColumnInfo[]{title, date}, itemInfoList);
-    final ListTableModel<ItemInfo> bookModel = new ListTableModel<>(new ColumnInfo[]{title, date}, books);
-    newsTable.setModelAndUpdateColumns(flatModel);
-    bookTable.setModelAndUpdateColumns(bookModel);
+    ProgressManager.getInstance().run(blogkTask);
 
 
     JScrollPane newTableScroll = ScrollPaneFactory.createScrollPane(newsTable, SideBorder.TOP);
     JScrollPane bookTableScroll = ScrollPaneFactory.createScrollPane(bookTable, SideBorder.TOP);
+    JScrollPane blogTableScroll = ScrollPaneFactory.createScrollPane(blogTable, SideBorder.TOP);
 
 
     toolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(newTableScroll, "资讯", false));
     toolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(bookTableScroll, "书讯", false));
+    toolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(blogTableScroll, "博客", false));
 
   }
 
@@ -789,7 +924,7 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
   private TableView getTableView() {
     TableView myTable = new TableView<ItemInfo>();
 
-    myTable.getEmptyText().setText("no news");
+    myTable.getEmptyText().setText("loading......");
     myTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     myTable.setShowHorizontalLines(false);
     myTable.setShowVerticalLines(false);
@@ -799,6 +934,7 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     myTable.setRowHeight(25);
     myTable.setTableHeader(null);
     return myTable;
+
   }
 
 
