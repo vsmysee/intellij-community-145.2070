@@ -1,6 +1,9 @@
 package com.intellij.ide.actions;
 
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
@@ -74,7 +77,7 @@ public class MyTypedActionHandler implements TypedActionHandler {
         @Override
         public void run() {
           try {
-            action.actionPerformed(new AnActionEvent(null, dataContext, "", new Presentation(), ActionManager.getInstance(), 0));
+            action.actionPerformed(AnActionEvent.createFromAnAction(action, null, "", dataContext));
           }
           catch (Exception e) {
             e.printStackTrace();
