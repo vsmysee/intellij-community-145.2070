@@ -1,0 +1,30 @@
+a ShowSelectActions
+
+
+1 GotoBookmark0
+2 GotoBookmark1
+3 GotoBookmark2
+4 GotoBookmark3
+6 GotoBookmark4
+7 GotoBookmark5
+8 GotoBookmark6
+9 GotoBookmark7
+0 GotoBookmark8
+- GotoBookmark9
+= ChooseRunConfiguration
+
+q ChooseDebugConfiguration
+w ToggleBookmark
+W ToggleBookmarkWithMnemonic
+e AutoIndentLines
+n EditorBackSpace
+N EditorDelete
+
+l EditorLookupUp
+L EditorLookupDown
+
+f ToggleFullScreen
+z ToggleZenMode
+c EditorScrollToCenter
+
+r Synchronize
