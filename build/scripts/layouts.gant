@@ -87,45 +87,44 @@ def layoutFull(String home, String targetDirectory, String patchedDescriptorDir 
 
   List<String> jpsCommonModules = ["jps-model-impl", "jps-model-serialization"]
   List<String> openapiModules = [platformApiModules,
-    "compiler-openapi",
-    "debugger-openapi",
-    "dom-openapi",
-    "execution-openapi",
-    "java-analysis-api",
-    "java-indexing-api",
-    "java-psi-api",
-    "jsp-openapi",
-    "jsp-base-openapi",
-    "openapi",
-    "remote-servers-java-api",
-    "testFramework-java",
-  ].flatten()
+                                 "compiler-openapi",
+                                 "debugger-openapi",
+                                 "dom-openapi",
+                                 "execution-openapi",
+                                 "java-analysis-api",
+                                 "java-indexing-api",
+                                 "java-psi-api",
+                                 "jsp-openapi",
+                                 "jsp-base-openapi",
+                                 "openapi",
+                                 "remote-servers-java-api",
+                                 "testFramework-java",].flatten()
 
   List<String> implementationModules = [platformImplementationModules,
-    "compiler-impl",
-    "debugger-impl",
-    "dom-impl",
-    "duplicates-analysis",
-    "execution-impl",
-    "external-system-impl",
-    "idea-ui",
-    "java-analysis-impl",
-    "java-indexing-impl",
-    "java-impl",
-    "java-psi-impl",
-    "java-structure-view",
-    "jsp-spi",
-    "manifest",
-    "platform-main",
-    "remote-servers-java-impl",
-    "structuralsearch",
-    "structuralsearch-java",
-    "testFramework",
-    "tests_bootstrap",
-    "typeMigration",
-    "ui-designer-core",
-  ].flatten()
-  implementationModules.removeAll(jpsCommonModules) //todo[nik] remove jps modules from platformImplementationModules instead and update layouts of minor IDEs accordingly
+                                        "compiler-impl",
+                                        "debugger-impl",
+                                        "dom-impl",
+                                        "duplicates-analysis",
+                                        "execution-impl",
+                                        "external-system-impl",
+                                        "idea-ui",
+                                        "java-analysis-impl",
+                                        "java-indexing-impl",
+                                        "java-impl",
+                                        "java-psi-impl",
+                                        "java-structure-view",
+                                        "jsp-spi",
+                                        "manifest",
+                                        "platform-main",
+                                        "remote-servers-java-impl",
+                                        "structuralsearch",
+                                        "structuralsearch-java",
+                                        "testFramework",
+                                        "tests_bootstrap",
+                                        "typeMigration",
+                                        "ui-designer-core",].flatten()
+  implementationModules.removeAll(jpsCommonModules)
+  //todo[nik] remove jps modules from platformImplementationModules instead and update layouts of minor IDEs accordingly
 
   ant.patternset(id: "resources.included") {
     include(name: "**/*.properties")
@@ -168,7 +167,7 @@ def layoutFull(String home, String targetDirectory, String patchedDescriptorDir 
       }
 
       jar("openapi.jar") {
-        openapiModules.each { module it}
+        openapiModules.each { module it }
       }
 
       jar("annotations.jar") {
@@ -179,12 +178,12 @@ def layoutFull(String home, String targetDirectory, String patchedDescriptorDir 
         fileset(dir: "${home}/java/jdkAnnotations")
       }
 
-      jar("extensions.jar") { module("extensions")}
+      jar("extensions.jar") { module("extensions") }
 
-      jar("external-system-rt.jar") { module("external-system-rt")}
+      jar("external-system-rt.jar") { module("external-system-rt") }
 
       jar([name: "idea.jar", duplicate: "preserve"]) {
-        implementationModules.each { module it}
+        implementationModules.each { module it }
       }
 
       jar("bootstrap.jar") { module("bootstrap") }
@@ -205,7 +204,8 @@ def layoutFull(String home, String targetDirectory, String patchedDescriptorDir 
               exclude(name: appInfoFileName())
             }
           }
-        } else {
+        }
+        else {
           module("community-resources")
           module(appInfoModule) {
             if (patchedDescriptorDir != null) {
@@ -218,7 +218,7 @@ def layoutFull(String home, String targetDirectory, String patchedDescriptorDir 
         }
       }
 
-      jar("idea_rt.jar") { module("java-runtime")}
+      jar("idea_rt.jar") { module("java-runtime") }
 
       jar("forms_rt.jar") {
         module("forms_rt")
@@ -343,10 +343,16 @@ public def layoutCommunityPlugins(String home, boolean maySkipAndroidPlugin = fa
   }
 
   dir("plugins") {
-    def simplePlugins = ["copyright", "java-i18n", "hg4idea", "github","oh-my-idea"] //, "tasks-time-tracking"]
+    def simplePlugins = ["copyright", "java-i18n", "hg4idea", "github"] //, "tasks-time-tracking"]
 
     simplePlugins.each {
       layoutPlugin it
+    }
+
+    layoutPlugin("oh-my-idea") {
+      fileset(dir: "$home/plugins/oh-my-idea/lib") {
+        include(name: "**/*.jar")
+      }
     }
 
     layoutPlugin("ant", "ant", "antIntegration") {
@@ -408,15 +414,15 @@ public def layoutCommunityPlugins(String home, boolean maySkipAndroidPlugin = fa
       }
 
       dir("maven3-server-lib") {
-        fileset(dir: "$home/plugins/maven/maven3-server-common/lib") {include(name: "*.jar")}
+        fileset(dir: "$home/plugins/maven/maven3-server-common/lib") { include(name: "*.jar") }
       }
       dir("maven3") {
         fileset(dir: "$home/plugins/maven/maven30-server-impl/lib/maven3")
       }
 
       dir("maven2-server-lib") {
-        fileset(dir: "$home/lib/") { include(name: "jaxb*.jar")}
-        fileset(dir: "$home/plugins/maven/maven2-server-impl/lib") {include(name: "*.jar")}
+        fileset(dir: "$home/lib/") { include(name: "jaxb*.jar") }
+        fileset(dir: "$home/plugins/maven/maven2-server-impl/lib") { include(name: "*.jar") }
       }
       dir("maven2") {
         fileset(dir: "$home/plugins/maven/maven2-server-impl/lib/maven2")
@@ -485,10 +491,10 @@ public def layoutCommunityPlugins(String home, boolean maySkipAndroidPlugin = fa
 
     pluginDir("cvsIntegration") {
       dir("lib") {
-        jar("cvs_util.jar") {noResources("cvs-core")}
-        jar("cvsIntegration.jar") {noResources("cvs-plugin")}
-        jar("javacvs-src.jar") {noResources("javacvs-src")}
-        jar("smartcvs-src.jar") {noResources("smartcvs-src")}
+        jar("cvs_util.jar") { noResources("cvs-core") }
+        jar("cvsIntegration.jar") { noResources("cvs-plugin") }
+        jar("javacvs-src.jar") { noResources("javacvs-src") }
+        jar("smartcvs-src.jar") { noResources("smartcvs-src") }
 
         resources(["cvs-core", "cvs-plugin", "javacvs-src", "smartcvs-src"])
 
@@ -514,7 +520,7 @@ public def layoutCommunityPlugins(String home, boolean maySkipAndroidPlugin = fa
 
     layoutPlugin("xpath") {
       dir("rt") {
-        jar("xslt-rt.jar") {module("xslt-rt")}
+        jar("xslt-rt.jar") { module("xslt-rt") }
       }
     }
 
@@ -680,7 +686,8 @@ def setPluginVersionAndSince(String moduleName, String version) {
     if (!text.contains("<version>")) {
       def dotIndex = version.indexOf('.')
       def untilBuild = dotIndex > 0 ? (Integer.parseInt(version.substring(0, dotIndex)) + 1).toString() + ".0" : version
-      file.text = text.replace("</id>", "</id>\n  <version>${version}</version>\n  <idea-version since-build=\"${version}\" until-build=\"${untilBuild}\"/>\n")
+      file.text = text.replace("</id>",
+                               "</id>\n  <version>${version}</version>\n  <idea-version since-build=\"${version}\" until-build=\"${untilBuild}\"/>\n")
     }
   }
 }
@@ -912,7 +919,7 @@ def layoutJps(String home, String targetDir, String buildNumber, Closure additio
 
       jar("maven-jps-plugin.jar") { module("maven-jps-plugin") }
       jar("gradle-jps-plugin.jar") { module("gradle-jps-plugin") }
-      fileset(dir: "$home/plugins/maven/maven30-server-impl/lib/maven3/lib") {include(name: "plexus-utils-*.jar")}
+      fileset(dir: "$home/plugins/maven/maven30-server-impl/lib/maven3/lib") { include(name: "plexus-utils-*.jar") }
 
       jar("eclipse-jps-plugin.jar") {
         module("common-eclipse-util")
