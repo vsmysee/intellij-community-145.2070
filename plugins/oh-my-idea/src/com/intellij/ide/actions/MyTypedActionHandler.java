@@ -39,7 +39,7 @@ public class MyTypedActionHandler implements TypedActionHandler {
   static {
     modMapping.put('i', App.EditorMode.INSERT);
     modMapping.put('y', App.EditorMode.COMMAND2);
-    modMapping.put('Y', App.EditorMode.COMMAND3);
+    modMapping.put('S', App.EditorMode.COMMAND3);
     modMapping.put('I', App.EditorMode.COMMAND4);
   }
 
