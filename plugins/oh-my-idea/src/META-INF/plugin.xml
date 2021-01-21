@@ -13,8 +13,8 @@
   </application-components>
 
   <extensions defaultExtensionNs="com.intellij">
-    <toolWindow id="ChinaPoem" anchor="right" factoryClass="com.intellij.ide.actions.poem.PoemToolWindowFactory"/>
-    <toolWindow id="TheWorld" anchor="bottom" factoryClass="com.intellij.ide.actions.news.NewsToolWindowFactory"/>
+    <toolWindow id="Poem" anchor="right" factoryClass="com.intellij.ide.actions.poem.PoemToolWindowFactory"/>
+    <toolWindow id="World" anchor="bottom" factoryClass="com.intellij.ide.actions.news.NewsToolWindowFactory"/>
   </extensions>
 
   <actions>
