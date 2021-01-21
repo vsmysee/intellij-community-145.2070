@@ -1,0 +1,8 @@
+copy /y "D:\Building\intellij-community-145.2070\out\dist.all.ce\plugins\oh-my-idea\lib" "C:\Program Files\Android\Android Studio2\plugins\oh-my-idea\lib"
+copy /y "D:\Building\intellij-community-145.2070\out\dist.all.ce\plugins\oh-my-idea\lib" "C:\Program Files (x86)\JetBrains\IntelliJ IDEA Community Edition 2016.1.4\plugins\oh-my-idea\lib"
+copy /y "D:\Building\intellij-community-145.2070\out\dist.all.ce\plugins\oh-my-idea\lib" "D:\Building\ideaIC-2017.3.7.win\plugins\oh-my-idea\lib"
+copy /y "D:\Building\intellij-community-145.2070\out\dist.all.ce\plugins\oh-my-idea\lib" "D:\Building\ideaIC-2018.3.6.win\plugins\oh-my-idea\lib"
+copy /y "D:\Building\intellij-community-145.2070\out\dist.all.ce\plugins\oh-my-idea\lib" "D:\Building\ideaIC-2019.1.4.win\plugins\oh-my-idea\lib"
+copy /y "D:\Building\intellij-community-145.2070\out\dist.all.ce\plugins\oh-my-idea\lib" "D:\Building\ideaIC-2020.1.4.win\plugins\oh-my-idea\lib"
+copy /y "D:\Building\intellij-community-145.2070\out\dist.all.ce\plugins\oh-my-idea\lib" "D:\Building\ideaIC-2020.2.3.win\plugins\oh-my-idea\lib"
+copy /y "D:\Building\intellij-community-145.2070\out\dist.all.ce\plugins\oh-my-idea\lib" "D:\Building\ideaIC-2020.3.win\plugins\oh-my-idea\lib"
