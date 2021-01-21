@@ -1,6 +1,5 @@
 package com.intellij.ide.actions;
 
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -52,9 +51,6 @@ public class App implements ApplicationComponent {
 
     handler = new MyTypedActionHandler(action.getHandler());
     action.setupHandler(handler);
-
-
-
 
     EditorFactoryAdapter listener = new EditorFactoryAdapter() {
 
