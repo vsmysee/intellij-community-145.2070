@@ -1,0 +1,51 @@
+a ShowSelectActions
+
+
+1 EditorCodeBlockStartWithSelection
+2 EditorCodeBlockEndWithSelection
+3 POEM_FORWARD
+4 ProjectViewChangeView
+5 ActivateVersionControlToolWindow
+6 ExtractMethod
+7 ActivateCommitToolWindow
+8 POEM_BACK
+9 IntroduceParameter
+0 HighlightUsagesInFile
+- IntroduceConstant
+= IntroduceField
+
+q EditorTextEndWithSelection
+w ClassNameCompletion
+e MoveLineUp
+E MoveStatementUp
+u EditorToggleColumnMode
+
+B Forward
+
+
+i InsertLiveTemplate
+
+/ CommentByLineComment
+? CommentByBlockComment
+h CallHierarchy
+
+
+P EditorToggleShowLineNumbers
+
+
+d MoveLineDown
+D MoveStatementDown
+
+v SplitVertically
+V SplitHorizontally
+
+< EditorCodeBlockStart
+> EditorCodeBlockEnd
+
+
+s ActivateStructureToolWindow
+p ActivateProjectToolWindow
+t ActivateTerminalToolWindow
+m ActivateMessagesToolWindow
+o ActivateTODOToolWindow
+f ActivateFavoritesToolWindow
