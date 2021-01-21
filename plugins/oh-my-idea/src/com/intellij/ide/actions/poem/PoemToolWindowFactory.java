@@ -64,14 +64,19 @@ public class PoemToolWindowFactory implements ToolWindowFactory {
       init();
     }
 
+    // show short poem
     List<String> poems = Arrays.asList(random().split(";"));
+    while (poems.size() > 12) {
+      poems = Arrays.asList(random().split(";"));
+    }
+
 
     Box content = Box.createVerticalBox();
 
     content.add(Box.createGlue());
 
     holder = new JPanel();
-    JComponent poem = PoemBuilder.build(poems,false);
+    JComponent poem = PoemBuilder.build(poems, false);
     holder.add(poem);
     content.add(holder);
 
@@ -100,7 +105,7 @@ public class PoemToolWindowFactory implements ToolWindowFactory {
     BufferedReader reader = null;
     try {
       is = PoemToolWindowFactory.class.getResourceAsStream("/icons/data.txt");
-      reader = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+      reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
       String line;
       while ((line = reader.readLine()) != null) {
         db.add(line);
