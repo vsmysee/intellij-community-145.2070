@@ -1,6 +1,5 @@
 a ShowSelectActions
 
-
 1 FindInPath
 ! RecentFiles
 
@@ -32,7 +31,7 @@ $ StepInto
 ) JumpToLastWindow
 
 - OptimizeImports
-_ ShowIntentionActions
+_ EditorStartNewLineBefore
 
 + JumpToNextChange
 = JumpToLastChange
@@ -56,7 +55,7 @@ u $Undo
 U EditorToggleCase
 
 o EditorStartNewLine
-O EditorStartNewLineBefore
+O ShowIntentionActions
 
 p $Paste
 P ParameterInfo
@@ -102,10 +101,11 @@ x $Delete
 X EditorDeleteToLineEnd
 
 c SmartTypeCompletion
-C EvaluateExpression
+C EditorTextEndWithSelection
 
-v ToggleLineBreakpoint
-V QuickJavaDoc
+v EditorCodeBlockEndWithSelection
+V EditorCodeBlockStartWithSelection
+
 
 b Back
 B DebugClass
