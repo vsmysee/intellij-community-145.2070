@@ -1,51 +1,126 @@
 a ShowSelectActions
 
+1 FindInPath
+! RecentFiles
 
-1 EditorCodeBlockStartWithSelection
-2 EditorCodeBlockEndWithSelection
-3 POEM_FORWARD
-4 ProjectViewChangeView
-5 ActivateVersionControlToolWindow
-6 ExtractMethod
-7 ActivateCommitToolWindow
-8 POEM_BACK
-9 IntroduceParameter
-0 HighlightUsagesInFile
-- IntroduceConstant
-= IntroduceField
+2 ReplaceInPath
+@ Unwrap
 
-q EditorTextEndWithSelection
-w ClassNameCompletion
-e MoveLineUp
-E MoveStatementUp
-u EditorToggleColumnMode
+3 HideAllWindows
+# EditorPageUp
 
-B Forward
+4 $Cut
+$ StepInto
+
+5 EditorDuplicate
+% StepOver
+
+6 IntroduceVariable
+^ RenameElement
+
+7 EditorDeleteLine
+& StepOut
+
+8 GotoFile
+* EditorPageDown
+
+9 GotoClass
+( GotoSymbol
+
+0 CompileDirty
+) JumpToLastWindow
+
+- OptimizeImports
+_ EditorStartNewLineBefore
+
++ JumpToNextChange
+= JumpToLastChange
+
+q FindUsages
+Q ShowUsages
+
+w EditorNextWord
+W EditorPreviousWord
+
+e EditorSelectWord
+E EditorUnSelectWord
+
+R CloseContent
+r $Redo
+
+t NextTab
+T PreviousTab
+
+u $Undo
+U EditorToggleCase
+
+o EditorStartNewLine
+O ShowIntentionActions
+
+p $Paste
+P ParameterInfo
+
+[ Inline
+] ImplementMethods
+
+A RecentChangedFiles
+
+s NextSplitter
+
+d GotoDeclaration
+D GotoImplementation
+
+f ReformatCode
+F FindWordAtCaret
+
+g Generate
+G EditorJoinLines
+
+h EditorLeft
+H EditorLineStart
+
+j EditorDown
+J EditorMoveToPageBottom
+
+k EditorUp
+K EditorMoveToPageTop
+
+l EditorRight
+L EditorLineEnd
+
+; RunClass
+: CodeCompletion
+
+' GotoSuperMethod
+\" OverrideMethods
+
+z SurroundWith
+Z GotoLine
+
+x $Delete
+X EditorDeleteToLineEnd
+
+c SmartTypeCompletion
+C EditorTextEndWithSelection
+
+v EditorCodeBlockEndWithSelection
+V EditorCodeBlockStartWithSelection
 
 
-i InsertLiveTemplate
+b Back
+B DebugClass
 
-/ CommentByLineComment
-? CommentByBlockComment
-h CallHierarchy
+n FindNext
+N FindPrevious
 
+m MethodDown
+M MethodUp
 
-P EditorToggleShowLineNumbers
+. EditorCompleteStatement
+> $Copy
 
+, GotoNextError
+< GotoPreviousError
 
-d MoveLineDown
-D MoveStatementDown
-
-v SplitVertically
-V SplitHorizontally
-
-< EditorCodeBlockStart
-> EditorCodeBlockEnd
-
-
-s ActivateStructureToolWindow
-p ActivateProjectToolWindow
-t ActivateTerminalToolWindow
-m ActivateMessagesToolWindow
-o ActivateTODOToolWindow
-f ActivateFavoritesToolWindow
+/ Find
+? Replace
