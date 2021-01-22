@@ -110,8 +110,11 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
     List<FutureTask<List<ItemInfo>>> newsTasks = new ArrayList<>();
 
-    newsTasks.add(buildTask(buildGetRequest("thoughtworks", "https://insights.thoughtworks.cn/tag/featured/", "a[rel=bookmark]", e -> e.text())));
-    newsTasks.add(buildTask(buildGetRequest("thoughtworks", "https://insights.thoughtworks.cn/", "a[rel=bookmark]", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1", "div.astrtext > a >h4", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1&TotalResult=4849&PageNo=2", "div.astrtext > a >h4", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1&TotalResult=4849&PageNo=3", "div.astrtext > a >h4", e -> e.text())));
+
+
     newsTasks.add(buildTask(buildGetRequest("segmentfault", "https://segmentfault.com/news/", "h4.news__item-title", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("cnblogs", "https://www.cnblogs.com", "a.post-item-title", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("ithome", "https://it.ithome.com", "ul.bl > li > a.img > img", e -> e.attr("alt"))));
@@ -125,9 +128,17 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     newsTasks.add(buildTask(buildGetRequest("toutiao", "https://toutiao.io/", "a[rel=external]", e -> e.attr("title"))));
     newsTasks.add(buildTask(buildGetRequest("yueguang", "https://www.williamlong.info/", "a[rel=bookmark]", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("tuicool", "https://www.tuicool.com/ah/20/", "a[style=display: block]", e -> e.text())));
-    newsTasks.add(buildTask(buildGetRequest("ibm", "https://developer.ibm.com/zh/articles/", "h3.developer--card__title > span", e -> e.text())));
+    newsTasks
+      .add(buildTask(buildGetRequest("ibm", "https://developer.ibm.com/zh/articles/", "h3.developer--card__title > span", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("lobste", "https://lobste.rs/", "a[rel=ugc noreferrer]", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("ycombinator", "https://news.ycombinator.com/", "a.storylink", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("afoo", "https://afoo.me/posts.html", "header.title > div > h2 > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("qbitai", "https://www.qbitai.com/", "div.text_box > h4 > a", e -> e.text())));
+
+
+    newsTasks
+      .add(buildTask(buildGetRequest("thoughtworks", "https://insights.thoughtworks.cn/tag/featured/", "a[rel=bookmark]", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("thoughtworks", "https://insights.thoughtworks.cn/", "a[rel=bookmark]", e -> e.text())));
 
     for (int i = 1; i <= 4; i++) {
       newsTasks.add(buildTask(
@@ -182,7 +193,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     }));
 
 
-
     newsTasks.add(buildTask(itemInfoList -> {
 
       String from = "thenewstack >";
@@ -219,7 +229,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
       }
 
     }));
-
 
 
     newsTasks.add(buildTask(itemInfoList -> {
@@ -322,7 +331,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
       }
 
     }));
-
 
 
     newsTasks.add(buildTask(itemInfoList -> {
