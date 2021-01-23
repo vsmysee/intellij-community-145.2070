@@ -115,6 +115,10 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1&TotalResult=4849&PageNo=3", "div.astrtext > a >h4", e -> e.text())));
 
 
+    newsTasks.add(buildTask(buildGetRequest("infoworld", "https://www.infoworld.com", "div.post-cont > h3 > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("dzone", "https://dzone.com/", "h3.article-title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("geeksforgeeks", "https://www.geeksforgeeks.org/", "div.content > div.head > a", e -> e.text())));
+
     newsTasks.add(buildTask(buildGetRequest("segmentfault", "https://segmentfault.com/news/", "h4.news__item-title", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("cnblogs", "https://www.cnblogs.com", "a.post-item-title", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("ithome", "https://it.ithome.com", "ul.bl > li > a.img > img", e -> e.attr("alt"))));
