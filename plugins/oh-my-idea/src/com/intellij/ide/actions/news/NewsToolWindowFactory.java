@@ -110,10 +110,29 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
     List<FutureTask<List<ItemInfo>>> newsTasks = new ArrayList<>();
 
+    newsTasks.add(buildTask(buildGetRequest("myzaker", "https://www.myzaker.com", "h2.article-title", e -> e.text())));
+
     newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1", "div.astrtext > a >h4", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1&TotalResult=4849&PageNo=2", "div.astrtext > a >h4", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1&TotalResult=4849&PageNo=3", "div.astrtext > a >h4", e -> e.text())));
 
+
+
+    newsTasks.add(buildTask(buildGetRequest("thenewstack", "https://thenewstack.io/", "h2.small > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("thenewstack", "https://thenewstack.io/page/2", "h2.small > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("thenewstack", "https://thenewstack.io/page/3", "h2.small > a", e -> e.text())));
+
+
+    newsTasks.add(buildTask(buildGetRequest("dockerone", "http://dockerone.com/", "h4 > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("dockerone", "http://dockerone.com/sort_type-new__day-0__is_recommend-0__page-2", "h4 > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("dockerone", "http://dockerone.com/sort_type-new__day-0__is_recommend-0__page-3", "h4 > a", e -> e.text())));
+
+
+    newsTasks.add(buildTask(buildGetRequest("meituan", "https://tech.meituan.com/", "h2.post-title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("meituan", "https://tech.meituan.com/page/2.html", "h2.post-title > a", e -> e.text())));
+
+    newsTasks.add(buildTask(buildGetRequest("kejilie", "http://www.kejilie.com", "h3.am_list_title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("tmtpost", "https://www.tmtpost.com/lists/latest_list_new", "li.part_post > div.info > a > h3", e -> e.text())));
 
     newsTasks.add(buildTask(buildGetRequest("infoworld", "https://www.infoworld.com", "div.post-cont > h3 > a", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("dzone", "https://dzone.com/", "h3.article-title > a", e -> e.text())));
@@ -138,6 +157,18 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     newsTasks.add(buildTask(buildGetRequest("ycombinator", "https://news.ycombinator.com/", "a.storylink", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("afoo", "https://afoo.me/posts.html", "header.title > div > h2 > a", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("qbitai", "https://www.qbitai.com/", "div.text_box > h4 > a", e -> e.text())));
+
+    newsTasks.add(buildTask(buildGetRequest("ruanyifeng", "http://www.ruanyifeng.com/blog/archives.html", "#alpha-inner > div.module-categories > div.module-content > ul.module-list > li > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("yinwang", "http://www.yinwang.org", "li.list-group-item > a", e -> e.text())));
+
+    newsTasks.add(buildTask(buildGetRequest("oschina", "https://www.oschina.net/translate", "div.translate-item > div.content > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("oschina", "https://www.oschina.net/translate/widgets/_translate_index_list?category=0&tab=completed&sort=&p=2&type=ajax", "div.translate-item > div.content > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("oschina", "https://www.oschina.net/translate/widgets/_translate_index_list?category=0&tab=completed&sort=&p=3&type=ajax", "div.translate-item > div.content > a", e -> e.text())));
+
+    newsTasks.add(buildTask(buildGetRequest("jdon", "https://www.jdon.com/", "div.important > div.info > a", e -> e.text())));
+
+    newsTasks.add(buildTask(buildGetRequest("cncf", "https://www.cncf.io/blog/", "p.archive-title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("cncf", "https://www.cncf.io/blog/page/2/", "p.archive-title > a", e -> e.text())));
 
 
     newsTasks
@@ -178,62 +209,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     }));
 
 
-    newsTasks.add(buildTask(itemInfoList -> {
-
-      Document doc = Jsoup.connect("https://www.jdon.com/").get();
-      Elements important = doc.select("div.important");
-
-      String from = "jdon >";
-      Element first = important.first();
-      Elements items = first.select("a");
-
-      for (Element item : items) {
-        ItemInfo itemInfo = new ItemInfo();
-        itemInfo.setTitle(from + item.text());
-        itemInfo.setDate("2012-12-25");
-        itemInfoList.add(itemInfo);
-      }
-
-    }));
-
-
-    newsTasks.add(buildTask(itemInfoList -> {
-
-      String from = "thenewstack >";
-
-      List<String> links = Arrays.asList("https://thenewstack.io/", "https://thenewstack.io/page/2", "https://thenewstack.io/page/3");
-      for (String link : links) {
-        Document doc = Jsoup.connect(link).get();
-        Elements items = doc.select("h2.small > a");
-        for (Element item : items) {
-          ItemInfo itemInfo = new ItemInfo();
-          itemInfo.setTitle(from + item.text());
-          itemInfo.setDate("2012-12-25");
-          itemInfoList.add(itemInfo);
-        }
-      }
-
-    }));
-
-
-    newsTasks.add(buildTask(itemInfoList -> {
-      String from = "dockerone >";
-
-      List<String> links = Arrays.asList("http://dockerone.com/", "http://dockerone.com/sort_type-new__day-0__is_recommend-0__page-2",
-                                         "http://dockerone.com/sort_type-new__day-0__is_recommend-0__page-3");
-      for (String link : links) {
-        Document doc = Jsoup.connect(link).get();
-        Elements items = doc.select("h4 > a");
-        for (Element item : items) {
-          ItemInfo itemInfo = new ItemInfo();
-          itemInfo.setTitle(from + item.text());
-          itemInfo.setDate("2012-12-25");
-          itemInfoList.add(itemInfo);
-        }
-      }
-
-    }));
-
 
     newsTasks.add(buildTask(itemInfoList -> {
       URL url = new URL("https://api.readhub.cn/technews?lastCursor=@null&pageSize=20");
@@ -271,24 +246,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     newsTasks.add(buildTask(itemInfoList -> {
 
       String from = "oschina >";
-
-      for (String link : Arrays.asList("https://www.oschina.net/translate",
-                                       "https://www.oschina.net/translate/widgets/_translate_index_list?category=0&tab=completed&sort=&p=2&type=ajax",
-                                       "https://www.oschina.net/translate/widgets/_translate_index_list?category=0&tab=completed&sort=&p=3&type=ajax")) {
-        Document doc = Jsoup.connect(link).get();
-
-        Elements select = doc.select("div.translate-item > div.content");
-
-        for (Element item : select) {
-
-          Elements items = item.select("a");
-
-          ItemInfo itemInfo = new ItemInfo();
-          itemInfo.setTitle(from + items.first().text());
-          itemInfo.setDate("");
-          itemInfoList.add(itemInfo);
-        }
-      }
 
       for (String link : Arrays
         .asList("https://my.oschina.net/editorial-story/widgets/_space_index_newest_blog?catalogId=0&q=&p=1&type=ajax",
@@ -336,29 +293,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
     }));
 
-
-    newsTasks.add(buildTask(itemInfoList -> {
-      String from = "yinwang >";
-
-      List<String> links2 = Arrays.asList("http://www.yinwang.org");
-      for (String link : links2) {
-        Document doc = Jsoup.connect(link).get();
-
-        Elements select = doc.select("li.list-group-item");
-
-        for (Element item : select) {
-
-          Elements items = item.select("a");
-          Elements dates = item.select("div.date");
-
-          ItemInfo itemInfo = new ItemInfo();
-          itemInfo.setTitle(from + items.first().text());
-          itemInfo.setDate(dates.first().text());
-          itemInfoList.add(itemInfo);
-        }
-      }
-
-    }));
 
     newsTasks.add(buildTask(itemInfoList -> {
       String from = "jetbrains >";
@@ -431,29 +365,6 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
     }));
 
-
-    newsTasks.add(buildTask(itemInfoList -> {
-      String from = "ruanyifeng >";
-
-      List<String> links2 = Arrays.asList("http://www.ruanyifeng.com/blog/archives.html");
-      for (String link : links2) {
-        Document doc = Jsoup.connect(link).get();
-
-        Elements select = doc.select("#alpha-inner > div.module-categories > div.module-content > ul.module-list > li");
-
-        for (Element item : select) {
-
-          Elements items = item.select("a");
-
-          ItemInfo itemInfo = new ItemInfo();
-          itemInfo.setTitle(from + items.first().text());
-          itemInfo.setDate(item.text());
-          itemInfoList.add(itemInfo);
-        }
-
-      }
-
-    }));
 
     runTasks(title, date, newsTable, newsTasks, "Loading");
     JScrollPane newTableScroll = ScrollPaneFactory.createScrollPane(newsTable, SideBorder.TOP);
