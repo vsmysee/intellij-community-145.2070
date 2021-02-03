@@ -110,7 +110,28 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
     List<FutureTask<List<ItemInfo>>> newsTasks = new ArrayList<>();
 
+    newsTasks.add(buildTask(buildGetRequest("trend", "https://awesomeopensource.com/projects/", "div.aos_project_title > a", e -> e.text())));
+
+    newsTasks.add(buildTask(buildGetRequest("36kr", "https://www.36kr.com", "a.article-item-title", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("ifanr", "https://www.ifanr.com/", "a.js-title-transform", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("iheima", "http://www.iheima.com", "a.title", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("donews", "https://www.donews.com/", "div.content > span.title", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("cnbeta", "https://www.cnbeta.com/", "div.item > dl > dt > a", e -> e.text())));
+
+
+    newsTasks.add(buildTask(buildGetRequest("toutiao", "https://toutiao.io/posts/hot/7", "h3.title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("jishuin", "https://jishuin.proginn.com/", "div.article-title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("jishuin", "https://jishuin.proginn.com/default/2", "div.article-title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("jishuin", "https://jishuin.proginn.com/default/3", "div.article-title > a", e -> e.text())));
+
+
+    newsTasks.add(buildTask(buildGetRequest("cbdio", "http://www.cbdio.com/node_2570.htm", "p.cb-media-title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("woshipm", "http://www.woshipm.com/", "h2.post-title > a", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("myzaker", "https://www.myzaker.com", "h2.article-title", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("topjava", "https://www.topjavablogs.com/", "a.itemLink", e -> e.text())));
+
+    newsTasks.add(buildTask(buildGetRequest("amazonaws", "https://amazonaws-china.com/cn/blogs/china/", "h2.blog-post-title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("amazonaws", "https://amazonaws-china.com/cn/blogs/china/page/2/", "h2.blog-post-title > a", e -> e.text())));
 
     newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1", "div.astrtext > a >h4", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1&TotalResult=4849&PageNo=2", "div.astrtext > a >h4", e -> e.text())));
