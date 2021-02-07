@@ -133,6 +133,13 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     newsTasks.add(buildTask(buildGetRequest("amazonaws", "https://amazonaws-china.com/cn/blogs/china/", "h2.blog-post-title > a", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("amazonaws", "https://amazonaws-china.com/cn/blogs/china/page/2/", "h2.blog-post-title > a", e -> e.text())));
 
+    newsTasks.add(buildTask(buildGetRequest("pingcap", "https://pingcap.com/blog-cn/", "h1.title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("codingnow", "https://blog.codingnow.com/", "h3.entry-header", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("coolshell", "https://coolshell.cn", "h2.entry-title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("360", "https://blogs.360.cn/", "h1.title > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("codechina", "https://codechina.org/", "ul.wp-block-latest-posts > li > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("aijishu", "https://aijishu.com/", "h3.text-body", e -> e.text())));
+
     newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1", "div.astrtext > a >h4", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1&TotalResult=4849&PageNo=2", "div.astrtext > a >h4", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("huanqiukexue", "https://huanqiukexue.com/plus/list.php?tid=1&TotalResult=4849&PageNo=3", "div.astrtext > a >h4", e -> e.text())));
@@ -165,10 +172,10 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
     newsTasks.add(buildTask(buildGetRequest("donews", "https://www.donews.com/", "div.info > p.title", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("cnblogs", "https://news.cnblogs.com/", "h2 > a[target=_blank]", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("cnblogs", "https://news.cnblogs.com/n/page/2/", "h2 > a[target=_blank]", e -> e.text())));
-    newsTasks.add(buildTask(buildGetRequest("hollischuang", "https://www.hollischuang.com/page/1", "h2 > a[title]", e -> e.attr("title"))));
-    newsTasks.add(buildTask(buildGetRequest("hollischuang", "https://www.hollischuang.com/page/2", "h2 > a[title]", e -> e.attr("title"))));
-    newsTasks.add(buildTask(buildGetRequest("hollischuang", "https://www.hollischuang.com/page/3", "h2 > a[title]", e -> e.attr("title"))));
-    newsTasks.add(buildTask(buildGetRequest("hollischuang", "https://www.hollischuang.com/page/4", "h2 > a[title]", e -> e.attr("title"))));
+    newsTasks.add(buildTask(buildGetRequest("hollischuang", "https://www.hollischuang.com/page/1", "article > header > h2 > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("hollischuang", "https://www.hollischuang.com/page/2", "article > header > h2 > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("hollischuang", "https://www.hollischuang.com/page/3", "article > header > h2 > a", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("hollischuang", "https://www.hollischuang.com/page/4", "article > header > h2 > a", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("toutiao", "https://toutiao.io/", "a[rel=external]", e -> e.attr("title"))));
     newsTasks.add(buildTask(buildGetRequest("yueguang", "https://www.williamlong.info/", "a[rel=bookmark]", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("tuicool", "https://www.tuicool.com/ah/20/", "a[style=display: block]", e -> e.text())));
@@ -190,6 +197,9 @@ public class NewsToolWindowFactory implements ToolWindowFactory {
 
     newsTasks.add(buildTask(buildGetRequest("cncf", "https://www.cncf.io/blog/", "p.archive-title > a", e -> e.text())));
     newsTasks.add(buildTask(buildGetRequest("cncf", "https://www.cncf.io/blog/page/2/", "p.archive-title > a", e -> e.text())));
+
+    newsTasks.add(buildTask(buildGetRequest("thzt", "https://thzt.github.io/archives/", "h2.post-title > a  > span", e -> e.text())));
+    newsTasks.add(buildTask(buildGetRequest("draveness", "https://draveness.me/", "article > a", e -> e.text())));
 
 
     newsTasks
