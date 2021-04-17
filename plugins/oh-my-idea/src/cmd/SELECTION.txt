@@ -1,0 +1,24 @@
+
+l EditorRightWithSelection
+L EditorLineEndWithSelection
+
+z EditorMoveToPageTopWithSelection
+Z EditorMoveToPageBottomWithSelection
+
+h EditorLeftWithSelection
+H EditorLineStartWithSelection
+
+j EditorDownWithSelection
+
+k EditorUpWithSelection
+
+p EditorPageUpWithSelection
+P EditorPageDownWithSelection
+
+
+C EditorTextEndWithSelection
+v EditorCodeBlockEndWithSelection
+V EditorCodeBlockStartWithSelection
+
+m EditorPreviousWordWithSelection
+M EditorNextWordWithSelection

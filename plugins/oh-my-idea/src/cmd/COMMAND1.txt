@@ -1,0 +1,18 @@
+a ShowSelectActions
+
+3 HideAllWindows
+0 CompileDirty
+
+q FindUsages
+Q ShowUsages
+
+e EditorSelectWord
+E EditorUnSelectWord
+
+R CloseContent
+O ShowIntentionActions
+P ParameterInfo
+g Generate
+c SmartTypeCompletion
+
+; RunClass

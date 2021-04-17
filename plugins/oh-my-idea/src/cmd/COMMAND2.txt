@@ -1,0 +1,22 @@
+a ShowSelectActions
+
+1 ToggleLineBreakpoint
+2 QuickJavaDoc
+
+3 POEM_FORWARD
+8 POEM_BACK
+
+4 ProjectViewChangeView
+
+0 HighlightUsagesInFile
+
+q EvaluateExpression
+
+w ClassNameCompletion
+
+u EditorToggleColumnMode
+P EditorToggleShowLineNumbers
+
+h CallHierarchy
+
+i InsertLiveTemplate

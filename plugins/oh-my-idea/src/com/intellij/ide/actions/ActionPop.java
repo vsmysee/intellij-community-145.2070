@@ -19,6 +19,8 @@ import static com.intellij.ide.actions.MyTypedActionHandler.modeMap;
 public class ActionPop extends EditorAction {
 
 
+
+
   private static class Handler extends EditorActionHandler {
     @Override
     public void execute(Editor editor, DataContext dataContext) {

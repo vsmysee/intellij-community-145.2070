@@ -1,0 +1,5 @@
+
+e MoveLineUp
+E MoveStatementUp
+d MoveLineDown
+D MoveStatementDown

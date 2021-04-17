@@ -1,0 +1,20 @@
+a ShowSelectActions
+
+= ChooseRunConfiguration
+q ChooseDebugConfiguration
+
+e AutoIndentLines
+
+r Synchronize
+
+f ToggleFullScreen
+
+l EditorLookupUp
+L EditorLookupDown
+
+z ToggleZenMode
+
+c EditorScrollToCenter
+
+n EditorBackSpace
+N EditorDelete

@@ -1,50 +1,33 @@
 a ShowSelectActions
 
-1 FindInPath
 ! ShowNavBar
 
 2 ShowSettings
 
-
 3 ShowProjectStructureSettings
-
 
 4 $Cut
 
-
 5 ExtractMethod
-
 
 6 GotoTypeDeclaration
 
-
 7 GotoTest
-
 
 8 GotoRelated
 
-
 9 CloseActiveTab
 
-
 0 GotoAction
-
-
-
-
-
 
 = FileStructurePopup
 
 q ShowBookmarks
 
-
 w EditorDeleteToWordStart
 W EditorDeleteToWordEnd
 
 e PreviousOccurence
-
-
 
 r NextOccurence
 
@@ -52,90 +35,32 @@ t ShowPopupMenu
 u Rerun
 
 
-
-
 o NextParameter
 O PrevParameter
-
-p EditorPageUpWithSelection
-P EditorPageDownWithSelection
-
-
-
-
-
 
 s Switcher
 
 
-
-
 f AddToFavoritesPopup
-
 
 g Resume
 
 
-h EditorLeftWithSelection
-H EditorLineStartWithSelection
-
-j EditorDownWithSelection
 J EditorScrollUp
 
-k EditorUpWithSelection
 K EditorScrollDown
-
-l EditorRightWithSelection
-L EditorLineEndWithSelection
 
 ; RemoveFromFavorites
 : EditorContextInfo
 
 
-
-
-z EditorMoveToPageTopWithSelection
-Z EditorMoveToPageBottomWithSelection
-
 x $Delete
-
-
-
-
-
-
-
-
 b ViewBreakpoints
 
 
 n NextProjectWindow
 N PreviousProjectWindow
 
-m EditorPreviousWordWithSelection
-M EditorNextWordWithSelection
-
-
 > $Copy
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Y $SelectAll
+

@@ -1,0 +1,71 @@
+1 EditorCodeBlockEnd
+2 EditorCodeBlockStart
+8 GotoFile
+9 GotoClass
+
+h EditorLeft
+H EditorLineStart
+
+j EditorDown
+J EditorMoveToPageBottom
+
+k EditorUp
+K EditorMoveToPageTop
+
+l EditorRight
+L EditorLineEnd
+
+w EditorNextWord
+W EditorPreviousWord
+
+* EditorPageDown
+# EditorPageUp
+
+
+m MethodDown
+M MethodUp
+
+
+, GotoNextError
+< GotoPreviousError
+
+
+t NextTab
+T PreviousTab
+
+
+b Back
+B Forward
+
+v SplitVertically
+V SplitHorizontally
+s NextSplitter
+
+
++ JumpToNextChange
+= JumpToLastChange
+
+F FindWordAtCaret
+
+
+n FindNext
+N FindPrevious
+
+
+
+( GotoSymbol
+! RecentFiles
+A RecentChangedFiles
+
+
+) JumpToLastWindow
+
+d GotoDeclaration
+D GotoImplementation
+
+
+' GotoSuperMethod
+Z GotoLine
+
+
+

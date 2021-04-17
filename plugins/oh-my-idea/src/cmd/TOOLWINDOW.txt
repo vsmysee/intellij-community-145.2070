@@ -1,0 +1,9 @@
+
+t ActivateTerminalToolWindow
+o ActivateTODOToolWindow
+p ActivateProjectToolWindow
+s ActivateStructureToolWindow
+f ActivateFavoritesToolWindow
+m ActivateMessagesToolWindow
+5 ActivateVersionControlToolWindow
+7 ActivateCommitToolWindow

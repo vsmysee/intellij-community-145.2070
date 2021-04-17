@@ -1,0 +1,15 @@
+
+1 GotoBookmark0
+2 GotoBookmark1
+3 GotoBookmark2
+4 GotoBookmark3
+5 GotoBookmark4
+6 GotoBookmark5
+7 GotoBookmark6
+8 GotoBookmark7
+0 GotoBookmark8
+- GotoBookmark9
+
+
+w ToggleBookmark
+W ToggleBookmarkWithMnemonic

@@ -15,6 +15,8 @@ import java.util.Map;
 
 public class MyTypedActionHandler implements TypedActionHandler {
 
+
+
   public static Map<App.EditorMode, Map<String, String>> modeMap = new HashMap<App.EditorMode, Map<String, String>>();
 
   static {
