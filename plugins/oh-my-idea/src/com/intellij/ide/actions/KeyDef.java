@@ -45,7 +45,7 @@ public class KeyDef {
 
     Map<String, String> defaultKey = new HashMap<>();
 
-    for (String txt : Arrays.asList("/cmd/NAV.txt", "/cmd/EDIT.txt", "/cmd/COMMAND1.txt")) {
+    for (String txt : Arrays.asList("/cmd/NAVIGATE.txt", "/cmd/EDIT.txt", "/cmd/COMMAND1.txt")) {
       for (String configItem : load(txt)) {
         String[] split = configItem.split(" ");
         String key = split[0];
