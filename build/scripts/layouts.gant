@@ -355,6 +355,12 @@ public def layoutCommunityPlugins(String home, boolean maySkipAndroidPlugin = fa
       }
     }
 
+    layoutPlugin("oh-my-poem") {
+      fileset(dir: "$home/plugins/oh-my-poem/lib") {
+        include(name: "**/*.jar")
+      }
+    }
+
     layoutPlugin("ant", "ant", "antIntegration") {
       jar("ant-jps-plugin.jar") {
         module("ant-jps-plugin")

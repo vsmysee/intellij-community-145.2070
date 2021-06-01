@@ -12,22 +12,11 @@
     </component>
   </application-components>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <toolWindow id="Poem" anchor="right" factoryClass="com.intellij.ide.actions.poem.PoemToolWindowFactory"/>
-  </extensions>
 
   <actions>
-    <action id="POEM_BACK" class="com.intellij.ide.actions.poem.BackAction" icon="/icons/prev.png">
-      <keyboard-shortcut first-keystroke="alt 7" keymap="$default"/>
-    </action>
-    <action id="POEM_FORWARD" class="com.intellij.ide.actions.poem.ForwardAction" icon="/icons/next.png">
-      <keyboard-shortcut first-keystroke="alt 8" keymap="$default"/>
-    </action>
+
     <action id="ShowSelectActions" class="com.intellij.ide.actions.ActionPop"/>
-    <action class="com.intellij.ide.actions.poem.ShowPoemAction" id="ShowPoemAction" icon="/icons/poem.png" text="ChinaPoem">
-      <add-to-group group-id="MainToolBar" anchor="last"/>
-      <add-to-group group-id="HelpMenu" anchor="after" relative-to-action="GotoAction"/>
-    </action>
+
   </actions>
 
 </idea-plugin>
