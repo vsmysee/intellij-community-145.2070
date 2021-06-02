@@ -10,7 +10,6 @@ public class PoemBuilder {
   private static final int titleSize = 25;
   private static final int bodySize = 35;
 
-
   private static JComponent title(List<String> poems) {
 
     Box horizontalBox = Box.createHorizontalBox();
@@ -19,11 +18,9 @@ public class PoemBuilder {
 
     JPanel title = new JPanel();
 
-    String text = poems.get(1);
-    int endIndex = text.indexOf("《");
-    String author = text.substring(0, endIndex);
-    JLabel comp = buildJLabel(text, titleSize);
-    comp.setText("<html><font color=rgb(72,72,72)>" + author + "</font><font color='blue'>" + text.substring(endIndex) + "</font></html>");
+    String author = poems.get(1);
+    JLabel comp = buildJLabel("", titleSize);
+    comp.setText("<html><font color=rgb(72,72,72)>" + author + "</font><font color='blue'>《" + poems.get(2) + "》</font></html>");
 
     horizontalBox.add(title);
 
@@ -36,10 +33,9 @@ public class PoemBuilder {
   private static JComponent buildHtmlPanel(List<String> poems) {
     Box horizontalBox = Box.createHorizontalBox();
 
-    String title = poems.get(1);
-    int index = title.indexOf("《");
+    String title = poems.get(2);
 
-    for (int i = poems.size() - 1; i > 1; i--) {
+    for (int i = poems.size() - 1; i > 2; i--) {
       horizontalBox.add(convertToHtml(poems.get(i), false));
     }
 
@@ -49,15 +45,14 @@ public class PoemBuilder {
     box.add(buildAuthor("   "));
     box.add(song);
     box.add(buildAuthor(" "));
-    box.add(buildAuthor(title.substring(0, index)));
+    box.add(buildAuthor(poems.get(1)));
 
 
     horizontalBox.add(box);
     horizontalBox.add(Box.createHorizontalStrut(15));
 
 
-    title = title.substring(index);
-    horizontalBox.add(convertToHtml(title.replace("《", "").replace("》", ""), true));
+    horizontalBox.add(convertToHtml(title, true));
 
     horizontalBox.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
@@ -120,7 +115,7 @@ public class PoemBuilder {
 
     List<JPanel> poemPanel = new ArrayList<>();
 
-    int index = 2;
+    int index = 3;
 
     if (pop) {
 
